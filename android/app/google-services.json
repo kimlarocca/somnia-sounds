@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "162090348678",
+    "project_id": "wnyc-app-demo",
+    "storage_bucket": "wnyc-app-demo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:162090348678:android:acbe9c06d49ffa5950a107",
+        "android_client_info": {
+          "package_name": "org.wnyc.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVsLvw_wsbgHMzfA3sZ6fBvSeZN3RwkBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

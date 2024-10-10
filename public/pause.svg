@@ -1,0 +1,25 @@
+<svg
+    role="img"
+    aria-label="pause icon"
+    class="pause-icon"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="2 2 20 20"
+    width="16"
+    height="16"
+  >
+    <title>pause icon</title>
+    <rect
+      x="6"
+      y="5"
+      width="4.0303"
+      height="14"
+      fill="white"
+    />
+    <rect
+      x="13.0532"
+      y="5"
+      width="4.0303"
+      height="14"
+      fill="white"
+    />
+  </svg>

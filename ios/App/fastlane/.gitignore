@@ -1,0 +1,7 @@
+report.xml
+metadata/
+screenshots/
+test_output/
+vendor*
+.bundle*
+output*

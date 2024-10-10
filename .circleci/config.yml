@@ -1,0 +1,291 @@
+version: 2.1
+
+orbs:
+  ruby: circleci/ruby@2.1.0
+  android: circleci/android@2.3.0
+  node: circleci/node@5.1.0 #not to be mistaken with node version 5.1.0
+  nypr-deploy: nypr/nypr-deploy@0.0.81
+
+filter_all: &filter_all
+  filters:
+    branches:
+      only: /.*/
+    tags:
+      only: /.*/
+
+filter_demo: &filter_demo
+  filters:
+    branches:
+      only: main
+    tags:
+      only: demo
+
+filter_prod: &filter_prod
+  filters:
+    branches:
+      ignore: /.*/
+    tags:
+      only: /^v[0-9]+\.[0-9]+\.[0-9]+.*$/
+
+workflows:
+  test-and-deploy:
+    jobs:
+      - build:
+          context: "dockerhub"
+          <<: *filter_all
+      - test_nginx:
+          context: "dockerhub"
+          <<: *filter_all  
+      - test:
+          context: "dockerhub"
+          <<: *filter_all
+          requires:
+            - build
+      - nypr-deploy/build_and_deploy:
+          <<: *filter_demo
+          name: Deploy (demo)
+          context: "AWS Deploy"
+          env: "demo"
+          repo: "wnyc-vue3"
+          service: "wnyc-vue3"
+          cluster: "wnyc-vue3"
+          cpu: 1024
+          memory: 2048
+          requires:
+            - test
+            - test_nginx
+      - nypr-deploy/build_and_deploy:
+          <<: *filter_prod
+          name: Deploy (prod)
+          context: "AWS Deploy"
+          env: "prod"
+          repo: "wnyc-vue3"
+          service: "wnyc-vue3"
+          cluster: "wnyc-vue3"
+          cpu: 1024
+          memory: 2048
+          requires:
+            - test
+            - test_nginx
+      - ios:
+          name: iOS (alpha)
+          context: 
+            - ios
+            - xcode
+          FASTLANE_LANE: alpha
+          env: demo
+          <<: *filter_demo
+          requires:
+            - test
+      - android:
+          name: Android (demo)
+          context: android
+          FASTLANE_LANE: internal
+          env: demo
+          <<: *filter_demo
+          requires:
+            - test
+      - ios:
+          name: iOS (prod)
+          context: 
+            - ios
+            - xcode
+          FASTLANE_LANE: beta
+          env: prod
+          <<: *filter_prod
+          requires:
+            - test
+      - android:
+          name: Android (prod)
+          context: android
+          FASTLANE_LANE: gamma
+          env: prod
+          <<: *filter_prod
+          requires:
+            - test
+
+jobs: 
+  # Note (allie): This is its own job because I don't 
+  # want to run the tests in an environment that has the
+  # built project. 
+  build:
+    executor: default
+    steps:
+      - checkout
+      - setup_npmrc
+      - node/install-packages
+      - run: 
+          name: Assert that it builds
+          command: |
+            npm run build
+
+  test:
+    executor: default
+    steps:
+      - checkout
+      - setup_npmrc
+      - node/install-packages
+      - run:
+          name: Run unit tests
+          command: |
+            npx nuxi prepare
+            npm run test      
+
+  test_nginx:
+    executor: default
+    parameters:
+      env:
+        type: enum
+        default: "demo"
+        enum: ["demo", "prod"]
+      tag:
+        type: string
+        default: ""
+    steps:
+      - checkout
+      - run:
+          name: Test NGINX
+          environment:
+            ENV: <<parameters.env>>
+          command: |
+            apt-get update && \
+            apt-get install -y nginx-extras
+            mkdir -p /app/nginx 
+            cp ./nginx/*.conf /etc/nginx/
+            nginx -t
+
+  ios:
+    executor: macosg2
+    parameters:
+      FASTLANE_LANE:
+        type: string
+        default: "build"
+      env:
+        type: enum
+        default: "demo"
+        enum: ["demo", "prod"]
+    working_directory: ~/project
+    environment:
+      FL_OUTPUT_DIR: output
+      FASTLANE_LANE: <<parameters.FASTLANE_LANE>>
+      ISAPP: "true"
+      ENV: <<parameters.env>>
+    shell: /bin/bash --login -o pipefail
+    steps:
+      - checkout
+      - setup_mobile_env
+      - gservice_config
+      - ruby/install-deps:
+          app-dir: ios/App
+          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "ios/App/Gemfile.lock" }}
+          clean-bundle: true
+      - setup_npmrc
+      - node/install:
+          node-version: 18.18.2
+      - node/install-packages
+      - run:
+          name: Capacitor Setup
+          command: |
+            npm run generate
+            npx cap sync ios
+      - run:
+          name: fastlane
+          command: |
+            cd ios/App; bundle exec fastlane $FASTLANE_LANE
+      - store_artifacts:
+          path: ios/App/output
+      - store_test_results:
+          path: ios/App/output/scan
+  android:
+    docker: 
+      - image: cimg/android:2023.07
+    parameters:
+      FASTLANE_LANE:
+        type: string
+        default: "build"
+      env:
+        type: enum
+        default: "demo"
+        enum: ["demo", "prod"]
+    working_directory: ~/project
+    environment:
+      FL_OUTPUT_DIR: output
+      FASTLANE_LANE: <<parameters.FASTLANE_LANE>>
+      base64-keystore: BASE64_KEYSTORE
+      release-key-alias: RELEASE_KEY_ALIAS
+      release-key-password: RELEASE_KEY_PASSWORD
+      release-key-store-password: RELEASE_KEYSTORE_PASSWORD
+      RELEASE_KEYSTORE: keystore
+      ISAPP: "true"
+      ENV: <<parameters.env>>
+    shell: /bin/bash --login -o pipefail
+    steps:
+      - checkout
+      - setup_mobile_env
+      - gservice_config
+      - ruby/install-deps:
+          app-dir: android
+          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "android/Gemfile.lock" }}
+      - node/install:
+          node-version: 18.18.2
+      - setup_npmrc
+      - android/restore-gradle-cache
+      - android/decode-keystore:
+          keystore-location: android/app/keystore
+      - android/create-keystore-properties:
+          working-directory: android
+      - node/install-packages:
+          cache-path: ~/.npm
+          cache-version: v1-npm-cache-{{ arch }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - run:
+          name: Capacitor Setup
+          command: |
+            patch node_modules/@capacitor/android/capacitor/src/main/java/com/getcapacitor/CapacitorWebView.java -i kludge/BackgroundPlay.diff
+            npm run generate
+            npx cap sync android
+      - run:
+          name: fastlane
+          command: |
+            cd android; bundle exec fastlane $FASTLANE_LANE
+      - android/save-gradle-cache
+      - store_artifacts:
+          path: android/app/build/outputs/apk
+
+commands:
+  setup_npmrc:
+    steps:
+      - run:
+          name: Setup .npmrc
+          command: |
+            echo "@nypublicradio:registry=https://npm.pkg.github.com" > .npmrc
+            echo "//npm.pkg.github.com/:_authToken=$PAT" >> .npmrc
+
+  setup_mobile_env:
+    steps:
+      - run:
+          name: Setup mobile environment
+          command: |
+            bash ./scripts/rename_env_vars.sh
+
+  gservice_config:
+    steps:
+      - run:
+          name: Setup Google Service Files on iOS and Android
+          command: |
+            bash ./scripts/gservice_config.sh
+    
+executors:
+  default:
+    docker:
+      - image: node:18.18.2
+        auth:
+          username: $DOCKERHUB_USER
+          password: $DOCKERHUB_PASS
+    environment: 
+      JOBS: 2
+  macosg2:
+    macos:
+      xcode: "15.2.0"
+    resource_class: macos.m1.large.gen1
+    environment:
+      JOBS: 2

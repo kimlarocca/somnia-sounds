@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  wnyc-vue3:
+    image: wnyc-vue3
+    container_name: wnyc-vue3
+    build:
+      context: .
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+      - SENTRY_DSN=$SENTRY_DSN
+      - SENTRY_ENV=$SENTRY_ENV
+      - ENV=$ENV
+      - LIVESTREAM_URL=$LIVESTREAM_URL
+      - NAVIGATION_API=$NAVIGATION_API
+      - SYSTEM_MESSAGES_API=$SYSTEM_MESSAGES_API
+      - STORIES_API=$STORIES_API
+      - IMAGE_BASE_URL=$IMAGE_BASE_URL
+      - BFF_URL=$BFF_URL
+      - SUPABASE_URL=$SUPABASE_URL
+      - SUPABASE_KEY=$SUPABASE_KEY
+      - SUPABASE_AUTH_SIGN_IN_REDIRECT_TO=$SUPABASE_AUTH_SIGN_IN_REDIRECT_TO
+      - SUPABASE_AUTH_TOKEN_NAME=$SUPABASE_AUTH_TOKEN_NAME
+      - WNYC_NOW_FEED_URL=$WNYC_NOW_FEED_URL
+    ports:
+      - 8880:8080
+    command: ['./scripts/entrypoint.sh']
+    restart: 'always'

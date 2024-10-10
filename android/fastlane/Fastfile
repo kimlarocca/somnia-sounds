@@ -1,0 +1,82 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  lane :build do
+    gradle(task: "assemble", build_type: "Release")
+  end
+
+  lane :internal do
+    # Adjust the `build_type` and `flavor` params as needed to build the right APK for your setup
+    gradle(
+      task: 'bundle',
+      build_type: 'Release'
+    )
+    upload_to_play_store(
+      release_status: 'completed',
+      track: 'internal',
+      package_name: 'org.wnyc.android'
+    ) # upload to Google Play Store
+  end
+
+  lane :gamma do
+    # Adjust the `build_type` and `flavor` params as needed to build the right APK for your setup
+    gradle(
+      task: 'bundle',
+      build_type: 'Release'
+    )
+    upload_to_play_store(
+      release_status: 'completed',
+      track: 'gamma',
+      package_name: 'org.wnyc.android'
+    ) # upload to Google Play Store
+  end
+
+  lane :aws_device_run_android do
+    ENV['AWS_REGION'] = 'us-west-2'
+    gradle(
+      task: 'assemble' 
+    )
+    # RUN tests on AWS Device Farm
+    aws_device_farm(
+      name: "android",
+      device_pool: "baseline",
+      binary_path: "app/build/outputs/apk/release/app-release.apk",
+      run_name: ENV['CIRCLE_BUILD_NUM'],
+      wait_for_completion: false
+    ) 
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(task: "clean assembleRelease")
+    upload_to_play_store
+  end
+
+  def on_error(exception)
+    slack(
+        message: "Lane failed with exception : #{exception}",
+        success: false
+    )
+  end
+end
