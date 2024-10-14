@@ -32,7 +32,7 @@ defineExpose({
     <div class="top" v-if="props.item?.image"></div>
     <div class="bottom flex flex-column gap-2 justify-content-between">
       <div class="flex flex-column gap-2">
-        <div class="title text-sm font-bold font-meta line-height-2">
+        <div class="title text-sm font-bold line-height-2">
           {{ props.item.title }}
         </div>
         <!-- <pre class="text-xs">{{ props.item }}</pre> -->

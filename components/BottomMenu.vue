@@ -27,9 +27,9 @@ watch(
   },
   { immediate: true }
 )
-// handle bottom menu click to set active and track the event
+
+// handle bottom menu click to set active
 const menuClick = item => {
-  trackClickEvent('Click Tracking - Bottom Menu', 'Bottom Menu', item.slug)
   bottomMenuState.value = { value: item.value }
 }
 </script>

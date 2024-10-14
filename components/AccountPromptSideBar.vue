@@ -25,7 +25,7 @@ const bgColorRef = ref(props.bgColor)
       class="content flex flex-column gap-3 py-5 px-4"
       :class="`style-mode-${props.styleMode}`"
     >
-      <h1 class="font-tisa text-5xl line-height-1 mb-4">
+      <h1 class="text-5xl line-height-1 mb-4">
         Save now, <span class="no-wrap">listen later.</span>
       </h1>
       <p class="text-base mb-3">

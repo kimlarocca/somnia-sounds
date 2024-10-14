@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
 @import './breakpoints';
 
 $mobileBreakpoint: '<md';
@@ -84,9 +85,8 @@ $shade800: map-get($colors, 'background3') !default; //unused
 $shade900: #121619 !default; //unused
 
 //global
-$fontFamily: 'Open Sans', sans-serif !default;
-$fontFamilyHeader: 'ff-meta-web-pro', sans-serif !default;
-$fontFamilyTisa: 'ff-tisa-web-pro', sans-serif !default;
+$fontFamily: 'Poiret One', sans-serif !default;
+$fontFamilyHeader: 'Poiret One', sans-serif !default;
 $fontSize: 1rem !default;
 $fontRatio: 1.125;
 $fontRatioLarge: 1.333;
