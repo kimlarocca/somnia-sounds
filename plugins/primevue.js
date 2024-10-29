@@ -7,6 +7,7 @@ import Dropdown from 'primevue/dropdown'
 import Menu from 'primevue/menu'
 import Listbox from 'primevue/listbox'
 import Menubar from 'primevue/menubar'
+import Password from 'primevue/password'
 import PrimeVue from 'primevue/config'
 import ProgressBar from 'primevue/progressbar'
 import Sidebar from 'primevue/sidebar'
@@ -55,6 +56,7 @@ export default defineNuxtPlugin( nuxtApp => {
     nuxtApp.vueApp.component( 'InlineMessage', InlineMessage )
     nuxtApp.vueApp.component( 'Divider', Divider )
     nuxtApp.vueApp.component( 'Message', Message )
+    nuxtApp.vueApp.component( 'Password', Password )
     nuxtApp.vueApp.component( 'ProgressSpinner', ProgressSpinner )
     nuxtApp.vueApp.component( 'Dialog', Dialog )
     nuxtApp.vueApp.component( 'ProgressBar', ProgressBar )

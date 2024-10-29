@@ -24,8 +24,10 @@ useHead({
     </Html>
 
     <section>
-      <h2 class="mt-4 mb-3">Section Header</h2>
-      <p>coming soon</p>
+      <h1 class="mt-4 mb-3">This Is A H1 Header</h1>
+      <h2 class="mt-4 mb-3">This Is A H2 Header</h2>
+      <h3 class="mt-4 mb-3">This Is A H3 Header</h3>
+      <p>More paragraphs are coming soon...</p>
     </section>
   </div>
 </template>

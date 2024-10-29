@@ -1,54 +1,54 @@
 <script setup>
-import { useSwipe } from "@vueuse/core"
+import { useSwipe } from '@vueuse/core'
 const props = defineProps({
   options: {
     type: Array,
     default: null,
-    required: true,
+    required: true
   },
   optionLabel: {
     type: String,
-    default: "label",
+    default: 'label'
   },
   data: {
     type: [String, Object],
-    default: null,
+    default: null
   },
   label: {
     type: String,
-    default: null,
+    default: null
   },
   placeholder: {
     type: String,
-    default: "Select",
+    default: 'Select'
   },
   customButton: {
     type: Boolean,
-    default: false,
+    default: false
   },
   width: {
     type: String,
-    default: "42px",
+    default: '42px'
   },
   height: {
     type: String,
-    default: "42px",
+    default: '42px'
   },
   normal: {
     type: Boolean,
-    default: false,
+    default: false
   },
   startOpen: {
     type: Boolean,
-    default: false,
+    default: false
   },
   checkMark: {
     type: Boolean,
-    default: true,
-  },
+    default: true
+  }
 })
 
-const emit = defineEmits(["update:data", "swipe-down"])
+const emit = defineEmits(['update:data', 'swipe-down'])
 
 const dataRef = ref(props.data)
 
@@ -75,8 +75,8 @@ function preventScrollOnTouch(event) {
 }
 // remove touch listener to the body
 const removeBodyTouch = () => {
-  document.body.removeEventListener("touchmove", preventScrollOnTouch, {
-    passive: false,
+  document.body.removeEventListener('touchmove', preventScrollOnTouch, {
+    passive: false
   })
 }
 
@@ -89,18 +89,18 @@ const closeMenu = () => {
 
 // brings teh panel back up to the top
 const reopenPanel = () => {
-  panel.value.classList.add("release")
-  panel.value.style.bottom = "0px"
+  panel.value.classList.add('release')
+  panel.value.style.bottom = '0px'
 }
 
 // when the dropdown is opened, set the panel ref
 const setPanel = async () => {
   await nextTick()
-  panel.value = document.getElementById("p-dropup-panel")
+  panel.value = document.getElementById('p-dropup-panel')
   // removes class to the css animation so the drag will be 1:1 with the finger
-  panel.value.classList.remove("release")
-  document.body.addEventListener("touchmove", preventScrollOnTouch, {
-    passive: false,
+  panel.value.classList.remove('release')
+  document.body.addEventListener('touchmove', preventScrollOnTouch, {
+    passive: false
   })
   //sets distanceThreshold based on the height of the panel
   distanceThreshold = panel.value.offsetHeight / distanceThresholdDivider
@@ -117,7 +117,7 @@ const swipe = useSwipe(panel, {
   passive: true,
   onSwipeStart() {
     // removes class to the css animation so the drag will be 1:1 with the finger
-    panel.value.classList.remove("release")
+    panel.value.classList.remove('release')
 
     touchstartY = swipe.lengthY.value
     touchstartTime = new Date().getTime()
@@ -135,7 +135,7 @@ const swipe = useSwipe(panel, {
     touchendY = swipe.lengthY.value
     touchendTime = new Date().getTime()
     handleSwipe()
-  },
+  }
 })
 
 // handles the detection of the direction of the drag movment
@@ -162,14 +162,16 @@ function handleSwipe() {
   if (isDraggingDown) {
     if (velocity > swipeThreshold || distance > distanceThreshold) {
       if (touchendY < touchstartY) {
-        panel.value.classList.add("release")
+        panel.value.classList.add('release')
         // set the panel bottom to the height of the panel + the shadow height
-        panel.value.style.bottom = `${(panel.value.offsetHeight + shadowHeight) * -1}px`
+        panel.value.style.bottom = `${
+          (panel.value.offsetHeight + shadowHeight) * -1
+        }px`
         // close the dropdown after the animation is done
         setTimeout(() => {
           closeMenu()
         }, 250)
-        emit("swipe-down")
+        emit('swipe-down')
       }
       if (touchendY > touchstartY) {
         reopenPanel()
@@ -201,9 +203,9 @@ onUnmounted(() => {
     @update:modelValue="$emit('update:data', $event)"
     @show="setPanel"
     @hide="unsetPanel"
-    :panelClass="`p-dropup-panel ${props.customButton ? 'is-customButton' : ''} ${
-      !props.checkMark ? 'hideCheckMark' : ''
-    }`"
+    :panelClass="`p-dropup-panel ${
+      props.customButton ? 'is-customButton' : ''
+    } ${!props.checkMark ? 'hideCheckMark' : ''}`"
     :panelProps="{ id: 'p-dropup-panel' }"
     @click.prevent
   >
@@ -245,7 +247,9 @@ onUnmounted(() => {
         <div
           :key="slotProps.option[props.optionLabel]"
           class="flex align-items-center station-options"
-          :class="[{ selected: slotProps.option[props.optionLabel] === dataRef }]"
+          :class="[
+            { selected: slotProps.option[props.optionLabel] === dataRef }
+          ]"
         >
           <img
             v-if="slotProps.option.image"
@@ -254,7 +258,11 @@ onUnmounted(() => {
             class="mr-3"
             style="width: 18px; height: 18px"
           />
-          <i v-if="slotProps.option.icon" class="mr-3" :class="slotProps.option.icon"></i>
+          <i
+            v-if="slotProps.option.icon"
+            class="mr-3"
+            :class="slotProps.option.icon"
+          ></i>
           <component
             class="mr-3 custom-icon"
             :active="slotProps.option.active ?? false"
@@ -296,7 +304,7 @@ onUnmounted(() => {
 @mixin checkMark {
   &:after {
     font-family: primeicons;
-    content: "\e909";
+    content: '\e909';
     position: absolute;
     right: 0;
     top: 0;

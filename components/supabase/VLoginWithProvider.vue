@@ -1,34 +1,34 @@
 <script setup>
-import { Browser } from "@capacitor/browser"
-import Button from "primevue/button"
-import Message from "primevue/message"
-import { ref } from "vue"
+import { Browser } from '@capacitor/browser'
+import Button from 'primevue/button'
+import Message from 'primevue/message'
 
-const errorMessage = ref("")
+const errorMessage = ref('')
 
 const props = defineProps({
   client: {
     default: null,
-    type: Object,
+    type: Object
   },
   config: {
     default: null,
-    type: Object,
+    type: Object
   },
   label: {
     default: null,
-    type: String,
+    type: String
   },
   provider: {
     default: null,
     required: true,
-    type: String,
+    type: String
   },
   redirectUrl: {
-    default: "http://localhost:3000",
-    type: String,
-  },
+    default: 'http://localhost:3000',
+    type: String
+  }
 })
+
 const innerClient = ref(props.client)
 const innerConfig = ref(props.config)
 
@@ -38,25 +38,26 @@ if (!props.client && !props.config) {
   innerConfig.value = useRuntimeConfig()
 }
 
-const emit = defineEmits(["submit-click", "submit-error", "submit-success"])
-// method triggered by the form submit to handle supabase login logic
+const emit = defineEmits(['submit-click', 'submit-error', 'submit-success'])
+
 const login = async () => {
-  emit("submit-click")
+  emit('submit-click')
   const res = await innerClient.value.auth.signInWithOAuth({
     options: {
-      redirectTo: props.redirectUrl,
+      redirectTo: props.redirectUrl
     },
-    provider: props.provider,
+    provider: props.provider
   })
   if (res.error) {
-    emit("submit-error", res.error)
+    emit('submit-error', res.error)
     errorMessage.value = res.error
   } else {
-    emit("submit-success")
+    emit('submit-success')
   }
 }
-// capitalise the first letter of a string
-const capFirstChar = (str) => {
+
+// capitalize the first letter of a string
+const capitalizeFirstLetter = str => {
   return str[0].toUpperCase() + str.slice(1)
 }
 </script>
@@ -66,13 +67,15 @@ const capFirstChar = (str) => {
     <template v-if="errorMessage">
       <Message class="mb-4" severity="error" :closable="false">
         Sorry, there was a problem logging in to your
-        {{ capFirstChar(props.provider) }} account:
+        {{ capitalizeFirstLetter(props.provider) }} account:
         {{ errorMessage }}
       </Message>
     </template>
     <Button
-      class="w-full"
-      :label="props.label ?? `Log in with ${capFirstChar(props.provider)}`"
+      class="w-full p-button"
+      :label="
+        props.label ?? `Log in with ${capitalizeFirstLetter(props.provider)}`
+      "
       v-bind="{ ...$attrs }"
       :aria-label="`${props.provider} login button`"
       @click="login"

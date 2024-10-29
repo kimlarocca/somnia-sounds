@@ -2,8 +2,8 @@
 const props = defineProps({
   label: {
     type: String,
-    default: '',
-  },
+    default: ''
+  }
 })
 
 const emit = defineEmits(['close-sidebar'])
@@ -28,3 +28,14 @@ const emit = defineEmits(['close-sidebar'])
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.s-header {
+  .p-button {
+    background-color: transparent;
+  }
+  h1 {
+    padding-top: 6px;
+  }
+}
+</style>

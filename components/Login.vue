@@ -54,13 +54,7 @@ const openForgotPassword = () => {
     <section>
       <p>
         Don't have an account yet?
-        <Button
-          link
-          label="Sign up"
-          class="link"
-          @click="onSignupClick"
-          aria-label="sign up"
-        />
+        <nuxt-link to="#" @click="onSignupClick"> Sign up</nuxt-link>
       </p>
       <SupabaseVLoginWithProvider
         :client="client"
@@ -93,13 +87,9 @@ const openForgotPassword = () => {
         <template #belowSubmit>
           <div class="mt-4 relative">
             <p class="text-center">
-              <Button
-                link
-                label="Forgot password?"
-                class="link m-auto block"
-                aria-label="forgot password"
-                @click="openForgotPassword"
-              />
+              <nuxt-link to="#" @click="openForgotPassword"
+                >Forgot password?</nuxt-link
+              >
             </p>
           </div>
         </template>

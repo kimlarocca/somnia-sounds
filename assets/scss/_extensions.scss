@@ -17,6 +17,9 @@
 .p-inputtext.p-invalid.p-component {
     border-width: 2px;
 }
+.p-inputtext:-internal-autofill-selected {
+    background-color: var(--s-box-background-color)!important;
+}
 
 .p-inputswitch .option {
     font-weight: var(--font-weight-700);
@@ -33,6 +36,7 @@
 
 .p-button {
     font-weight: var(--font-weight-700);
+    background-color: var(--purple);
 }
 
 form {

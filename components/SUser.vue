@@ -6,8 +6,9 @@ import {
   useCurrentUser,
   useCurrentUserProfile
 } from '~/composables/states.ts'
-import { trackClickEvent, logOutUser } from '~/utilities/helpers'
+import { logOutUser } from '~/utilities/helpers'
 import { useToast } from 'primevue/usetoast'
+
 const toast = useToast()
 
 const props = defineProps({
@@ -32,53 +33,28 @@ const client = useSupabaseClient()
 const config = useRuntimeConfig()
 const imageUploadModal = shallowRef(false)
 
-// actions to be taken with the log in button is clicked
 const onLogIn = () => {
   loginSideBar.value = true
-  trackClickEvent(
-    'Click Tracking - login button',
-    'Settings Sidebar - user section',
-    'login button'
-  )
 }
-// actions to be taken with the log out button is clicked
+
 const onLogOut = async () => {
   await logOutUser()
-
   settingsSideBar.value = false
-
-  //GTM
-  trackClickEvent(
-    'Click Tracking - logout button',
-    'Settings Sidebar - user section',
-    'logout button'
-  )
-
   // show toast
   toast.add({
     severity: 'success',
-    summary: 'You have logged out.',
+    summary: 'You have been logged out.',
     life: 3000
   })
 }
-// actions to be taken with the sign up link is clicked
+
 const onSignUp = () => {
   signupSideBar.value = true
-  trackClickEvent(
-    'Click Tracking - sign up link',
-    'Settings Sidebar - user section',
-    'sign up link'
-  )
 }
-// handles the modal on avatar image when clicked
+
 const handleModal = () => {
   if (!props.disabled) {
     imageUploadModal.value = true
-    trackClickEvent(
-      'Click Tracking - Avatar Image link',
-      'Settings Sidebar - user section',
-      'request to upload image'
-    )
   } else {
     emit('onDisabled')
   }
@@ -96,6 +72,7 @@ const avatarUrl = computed(() => {
 <template>
   <div class="s-user flex gap-3">
     <Avatar
+      v-if="currentUser"
       :image="avatarUrl"
       size="large"
       :style="`
@@ -105,8 +82,6 @@ const avatarUrl = computed(() => {
       @click="handleModal"
     >
       <template #icon v-if="!avatarUrl">
-        <IconsUserIcon />
-
         <Button
           v-if="currentUser && props.isEmail"
           icon="pi pi-plus"
@@ -133,34 +108,26 @@ const avatarUrl = computed(() => {
         @imageUploaded="
           imageUrl => {
             currentUserProfile.avatar_image_url = imageUrl
-            trackClickEvent(
-              'Event Tracking - VUloadImage',
-              'Settings Sidebar - user section',
-              `image uploaded and saved: ${imageUrl}`
-            )
           }
         "
       />
     </Dialog>
     <div v-if="currentUser" class="info flex flex-column gap-2 mt-2">
-      <h2>Hi, {{ currentUserProfile?.name }}</h2>
-      <VFlexibleLink to="/home" class="p1" @click="onLogOut"
-        >Log out</VFlexibleLink
-      >
+      <h2 class="mb-2">Hi, {{ currentUserProfile?.name }}</h2>
+      <nuxt-link to="/home" class="p1" @click="onLogOut"> Log out </nuxt-link>
     </div>
-    <div v-else class="info flex flex-column gap-3 mt-2">
-      <h2>You are logged out.</h2>
+    <div v-else class="info flex flex-column gap-3 mb-4">
+      <h2 class="mb-2">You are logged out.</h2>
       <Button
         label="Log in"
         rounded
         @click="onLogIn"
-        class="w-9rem"
+        class="w-9rem mb-2"
         aria-label="login"
       />
-
       <p>
         Don't have an account yet?
-        <VFlexibleLink to="#" @click="onSignUp"> Sign up </VFlexibleLink>
+        <nuxt-link to="#" @click="onSignUp"> Sign up </nuxt-link>
       </p>
     </div>
   </div>
@@ -168,6 +135,9 @@ const avatarUrl = computed(() => {
 
 <style lang="scss" scoped>
 .s-user {
+  .user-icon path {
+    color: var(--night--500);
+  }
   .p-avatar {
     width: 40px;
     height: 40px;
@@ -176,6 +146,9 @@ const avatarUrl = computed(() => {
     background-color: #ffffff;
     color: var(--night--500);
     border-radius: 50%;
+    img {
+      object-fit: cover;
+    }
     .p-button {
       position: absolute;
       transform: scale(0.5);
@@ -184,16 +157,6 @@ const avatarUrl = computed(() => {
       &:before {
         font-weight: 900;
       }
-    }
-  }
-}
-</style>
-
-<style lang="scss">
-.s-user {
-  .p-avatar {
-    img {
-      object-fit: cover;
     }
   }
 }

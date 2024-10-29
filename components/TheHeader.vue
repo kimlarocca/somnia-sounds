@@ -31,9 +31,8 @@ const settingsSideBar = useSettingSideBar()
   .pi-bars {
     font-size: var(--font-size-7);
   }
-  .logo {
-    height: 35px;
-    margin-top: -5px;
+  .p-button {
+    background-color: transparent;
   }
 }
 </style>

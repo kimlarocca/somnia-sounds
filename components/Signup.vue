@@ -5,8 +5,6 @@ import {
   useSettingSideBar
 } from '~/composables/states'
 
-import { trackClickEvent } from '~/utilities/helpers'
-
 const settingsSideBar = useSettingSideBar()
 const signUpSideBar = useSignupSideBar()
 const loginSideBar = useLoginSideBar()
@@ -14,29 +12,13 @@ const loginSideBar = useLoginSideBar()
 const client = useSupabaseClient()
 const config = useRuntimeConfig()
 
-// handle the login and signup sidebars when the user clicks on the login link
 const onLoginClick = () => {
   loginSideBar.value = true
   signUpSideBar.value = false
-  trackClickEvent(
-    'Click Tracking - log in',
-    'Sign Up Sidebar - user section',
-    'log in link'
-  )
-}
-
-// actions to be taken with the signup link is clicked
-const onSignup = provider => {
-  trackClickEvent(
-    'Click Tracking - sign up',
-    'Sign Up Sidebar - user section',
-    provider
-  )
 }
 
 // close all sidebars
 const closeAll = () => {
-  onSignup('email')
   loginSideBar.value = false
   signUpSideBar.value = false
   settingsSideBar.value = false
@@ -51,13 +33,9 @@ const closeAll = () => {
     <section>
       <p>
         Already have an account?
-        <Button
-          link
-          label="Log in"
-          class="link"
-          aria-label="login"
-          @click="onLoginClick"
-        />
+        <nuxt-link to="#" aria-label="login" @click="onLoginClick"
+          >Log in</nuxt-link
+        >
       </p>
       <SupabaseVLoginWithProvider
         :client="client"
@@ -66,7 +44,6 @@ const closeAll = () => {
         label="Sign up with Google"
         severity="secondary"
         class="center my-3"
-        @login-success="onSignup('google')"
       />
       <SupabaseVLoginWithProvider
         :client="client"
@@ -75,7 +52,6 @@ const closeAll = () => {
         severity="secondary"
         class="center"
         label="Sign up with Apple"
-        @login-success="onSignup('apple')"
       />
       <Divider class="my-4" align="center">
         <b>or</b>
@@ -90,18 +66,17 @@ const closeAll = () => {
       >
         <template #aboveSubmit>
           <p class="mb-3">
-            By proceeding to create your account, you are agreeing to New York
-            Public Radio's
-            <VFlexibleLink to="/terms">Terms of Service</VFlexibleLink> and
-            <VFlexibleLink to="/privacy">Privacy Policy</VFlexibleLink>
+            By proceeding to create your account, you are agreeing to Somnia
+            Sounds'
+            <nuxt-link to="https://somniasounds.com/terms">
+              Terms of Service
+            </nuxt-link>
+            and
+            <nuxt-link to="https://somniasounds.com/privacy">
+              Privacy Policy
+            </nuxt-link>
           </p>
         </template>
-        <!-- <template #success>
-          <VLoginWithEmail
-            :client="client"
-            :config="config"
-          />
-        </template> -->
       </SupabaseVSignupWithEmail>
     </section>
   </div>

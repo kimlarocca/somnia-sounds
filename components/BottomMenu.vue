@@ -5,7 +5,7 @@ import HomeIcon from './icons/HomeIcon.vue'
 import MoonIcon from './icons/MoonIcon.vue'
 import BrowseIcon from './icons/BrowseIcon.vue'
 import StarIcon from './icons/StarIcon.vue'
-import { trackClickEvent, capitalizeFirstLetter } from '~/utilities/helpers'
+import { capitalizeFirstLetter } from '~/utilities/helpers'
 const route = useRoute()
 
 const bottomMenuState = useBottomMenuState()

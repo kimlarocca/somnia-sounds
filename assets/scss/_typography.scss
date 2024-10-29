@@ -9,8 +9,8 @@ $type-header1: (
             'font-family': var(--font-family-header),
             'font-size': var(--font-size-15),
             'line-height': var(--font-size-15),
-            'font-weight': var(--font-weight-600),
-            'letter-spacing': -0.02em,
+            'font-weight': var(--font-weight-200),
+            'letter-spacing': 0,
             'color': var(--text-color),
         ),
     ),
@@ -27,8 +27,8 @@ $type-header2: (
             'font-family': var(--font-family-header),
             'font-size': var(--font-size-13),
             'line-height': var(--font-size-13),
-            'font-weight': var(--font-weight-600),
-            'letter-spacing': -0.02em,
+            'font-weight': var(--font-weight-200),
+            'letter-spacing': 0,
             'color': var(--text-color),
         ),
     ),
@@ -45,8 +45,8 @@ $type-header3: (
             'font-family': var(--font-family-header),
             'font-size': var(--font-size-12),
             'line-height': var(--font-size-12),
-            'font-weight': var(--font-weight-600),
-            'letter-spacing': -0.02em,
+            'font-weight': var(--font-weight-200),
+            'letter-spacing': 0,
             'color': var(--text-color),
         ),
     ),
@@ -63,8 +63,8 @@ $type-header4: (
             'font-family': var(--font-family-header),
             'font-size': var(--font-size-10),
             'line-height': var(--font-size-10),
-            'font-weight': var(--font-weight-600),
-            'letter-spacing': -0.02em,
+            'font-weight': var(--font-weight-200),
+            'letter-spacing': 0,
             'color': var(--text-color),
         ),
     ),
@@ -83,8 +83,8 @@ $type-header5: (
             'font-family': var(--font-family-header),
             'font-size': var(--font-size-8),
             'line-height': var(--font-size-9),
-            'font-weight': var(--font-weight-600),
-            'letter-spacing': -0.02em,
+            'font-weight': var(--font-weight-200),
+            'letter-spacing': 0,
             'color': var(--text-color),
         ),
     ),
@@ -103,8 +103,8 @@ $type-header6: (
             'font-family': var(--font-family-header),
             'font-size': var(--font-size-6),
             'line-height': var(--font-size-7),
-            'font-weight': var(--font-weight-600),
-            'letter-spacing': -0.02em,
+            'font-weight': var(--font-weight-200),
+            'letter-spacing': 0,
             'color': var(--text-color),
         ),
     ),
@@ -123,7 +123,7 @@ $type-header7: (
             'font-family': var(--font-family),
             'font-size': var(--font-size-6),
             'line-height': var(--font-size-8),
-            'font-weight': var(--font-weight-500),
+            'font-weight': var(--font-weight-200),
             'color': var(--text-color),
         ),
     ),
@@ -141,7 +141,7 @@ $type-title: (
             'font-family': var(--font-family-header),
             'font-size': var(--font-size-5),
             'line-height': var(--font-size-7),
-            'font-weight': var(--font-weight-600),
+            'font-weight': var(--font-weight-200),
             'color': var(--text-color),
             'letter-spacing': 0.05em,
             'text-transform': uppercase,
@@ -358,52 +358,49 @@ $type-fineprint: (
 h1,
 .h1,
 .type-header1 {
+    padding: 0;
+    margin: 0;
     @include font-config($type-header1);
+    font-optical-sizing: auto;
 }
 
 h2,
 .h2,
 .type-header2 {
+    padding: 0;
+    margin: 0;
     @include font-config($type-header2);
+    font-optical-sizing: auto;
 }
 
 h3,
 .h3,
 .type-header3 {
+    padding: 0;
+    margin: 0;
     @include font-config($type-header3);
+    font-optical-sizing: auto;
 }
 
 h4,
 .h4,
 .type-header4 {
+    padding: 0;
+    margin: 0;
     @include font-config($type-header4);
-}
-
-h5,
-.h5,
-.type-header5 {
-    @include font-config($type-header5);
-}
-
-h6,
-.h6,
-.type-header6 {
-    @include font-config($type-header6);
-}
-
-h7,
-.h7,
-.type-header7 {
-    @include font-config($type-header7);
+    font-optical-sizing: auto;
 }
 
 .type-title {
     @include font-config($type-title);
+    font-optical-sizing: auto;
 }
 
 p,
 .p1,
 .type-paragraph1 {
+    padding: 0;
+    margin: 0;
     @include font-config($type-paragraph1);
 }
 

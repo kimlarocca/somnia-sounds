@@ -1,33 +1,29 @@
 <script setup>
 import { useVuelidate } from '@vuelidate/core'
 import { email, helpers, required } from '@vuelidate/validators'
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
-import Message from 'primevue/message'
-import { computed, reactive, ref } from 'vue'
 const props = defineProps({
   client: {
     default: null,
-    type: Object,
+    type: Object
   },
   config: {
     default: null,
-    type: Object,
+    type: Object
   },
   error: {
     default:
       'Sorry, there was a problem creating your magic link. Please try again! Error message:',
-    type: String,
+    type: String
   },
   label: {
     default: 'Send magic link',
-    type: String,
+    type: String
   },
   success: {
     default:
       'Success! If you created an account with that email address, you will get an email to with a magic link to login.<br>If you created your account with Google or Apple, please log in with those options.',
-    type: String,
-  },
+    type: String
+  }
 })
 
 const emit = defineEmits(['submit-click', 'submit-error', 'submit-success'])
@@ -43,7 +39,7 @@ if (!props.client && !props.config) {
 
 const formData = reactive({
   email: '',
-  password: '',
+  password: ''
 })
 
 const sbErrorMsg = ref('')
@@ -53,8 +49,8 @@ const rules = computed(() => {
   return {
     email: {
       email: helpers.withMessage('Invalid email format', email),
-      required: helpers.withMessage('The email field is required', required),
-    },
+      required: helpers.withMessage('The email field is required', required)
+    }
   }
 })
 

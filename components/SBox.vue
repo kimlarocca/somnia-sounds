@@ -24,17 +24,15 @@ const props = defineProps({
   }
 })
 
-// TEMP fix to make ripple work+
+// fix to make ripple work
 import { usePrimeVue } from 'primevue/config'
 const $primevue = usePrimeVue()
 defineExpose({
   $primevue
 })
-// TEMP fix to make ripple work
 const settingSideBar = useSettingSideBar()
 const emit = defineEmits(['link-click', 'label-click'])
 
-// handles when the button is clicked. emits and closes the side panel
 const onClick = () => {
   emit('link-click', props.link)
   if (settingSideBar.value) {
@@ -55,22 +53,22 @@ const onClick = () => {
       v-ripple
       :class="[{ killRipple: !props.ripple }]"
     >
-      <VFlexibleLink @click="onClick" v-if="link" raw :to="link" class="w-full">
+      <nuxt-link @click="onClick" v-if="link" raw :to="link" class="w-full">
         <Button
           :label="label"
           class="w-full text-left"
           text
           aria-label="menu item"
         />
-      </VFlexibleLink>
-      <VFlexibleLink v-else-if="isLink" raw class="w-full">
+      </nuxt-link>
+      <nuxt-link v-else-if="isLink" raw class="w-full">
         <Button
           :label="label"
           class="w-full text-left"
           text
           aria-label="menu item"
         />
-      </VFlexibleLink>
+      </nuxt-link>
       <div v-else>
         <div
           class="label-holder flex h-full py-3 align-items-center cursor-pointer"
@@ -88,7 +86,6 @@ const onClick = () => {
 
 <style lang="scss" scoped>
 .s-box {
-  background-color: var(--s-box-background-color);
   width: 100%;
   height: 50px;
   padding: 0 1.25rem;
@@ -126,6 +123,11 @@ const onClick = () => {
 </style>
 <style lang="scss">
 .s-box {
+  .p-button {
+    background-color: transparent;
+    color: var(--white);
+    padding-left: 1.25rem;
+  }
   .content {
     &.killRipple {
       .p-ink,

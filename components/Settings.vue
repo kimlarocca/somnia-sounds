@@ -1,21 +1,16 @@
 <script setup>
-import { onMounted } from 'vue'
 import {
-  trackClickEvent,
   getYear,
   setFontSize,
-  setDarkMode,
   toggleAskNotificationPermisstions
 } from '~/utilities/helpers'
 import {
-  useAllCurrentStations,
   useTextSizeOption,
   useCurrentUser,
   useCurrentUserProfile,
   useEditProfileSideBar,
   useIsLiveStream,
-  useIsApp,
-  useAccountDeleteSideBar
+  useIsApp
 } from '~/composables/states.ts'
 import { Preferences } from '@capacitor/preferences'
 import { localUserProfileKey } from '~/composables/globals'
@@ -28,10 +23,6 @@ const textSizeOptions = useTextSizeOption()
 const editProfileSideBar = useEditProfileSideBar()
 const isLiveStream = useIsLiveStream()
 const isApp = useIsApp()
-const accountDeleteSideBar = useAccountDeleteSideBar()
-
-const allCurrentStations = useAllCurrentStations()
-const stationsMenuData = ref([])
 const client = useSupabaseClient()
 
 //const isApple = currentUser.value?.app_metadata?.provider === 'apple'
@@ -57,25 +48,6 @@ const showMessage = async (
   theMessage.value = myMessage
 }
 
-// formats the station list for the dropdown
-const initializeStationList = val => {
-  const tempMenuData = []
-
-  val.forEach(station => {
-    tempMenuData.push({
-      label: station.title,
-      name: station.title,
-      station: station.station,
-      code: station.title,
-      slug: station.slug,
-      image: station.image,
-      times: `${station.timeStart} - ${station.timeEnd}`
-    })
-  })
-
-  stationsMenuData.value = tempMenuData
-}
-
 const updateProfile = async () => {
   // update supabase and local storage
   if (currentUser.value && currentUserProfile.value) {
@@ -85,11 +57,6 @@ const updateProfile = async () => {
         id: currentUser.value.id,
         updated_at: new Date().toISOString(),
         name: currentUserProfile.value.name,
-        // pronouns: pronouns.value,
-        // continuous_play: continuousPlay.value,
-        default_live_stream:
-          currentUserProfile.value.default_live_stream.station,
-        dark_mode: currentUserProfile.value.dark_mode,
         receive_general_notifications:
           currentUserProfile.value.receive_general_notifications,
         text_size: currentUserProfile.value.text_size.label,
@@ -115,10 +82,6 @@ const updateProfile = async () => {
 
 const tempEmail = shallowRef(currentUser.value?.email)
 
-onMounted(async () => {
-  await initializeStationList(allCurrentStations.value)
-})
-
 watch(currentUserProfile.value, () => {
   updateProfile()
 })
@@ -126,21 +89,10 @@ watch(currentUserProfile.value, () => {
 // handles setting the font size and tracking the event
 const onUpdateTextSize = () => {
   setFontSize(currentUserProfile.value.text_size.pixel)
-
-  trackClickEvent(
-    'Click Tracking - Test size',
-    'Settings Sidebar - Display',
-    currentUserProfile.value.text_size.label
-  )
 }
 
 // handles tracking the station change event
 const onUpdateStation = () => {
-  trackClickEvent(
-    'Click Tracking - Default stream',
-    'Settings Sidebar - Listening Preferences',
-    currentUserProfile.value.default_live_stream.station
-  )
   // if not playing, update the live stream so the home page updates with the new default stream
   if (!isLiveStream.value) {
     updateLiveStream(currentUserProfile.value.default_live_stream.slug)
@@ -166,11 +118,6 @@ const accountHeader = computed(() => {
 const editField = field => {
   if (!isDisabled.value) {
     editProfileSideBar.value = true
-    trackClickEvent(
-      'Click Tracking - edit user profile',
-      'Settings Sidebar - Account',
-      `${field} field clicked`
-    )
   }
 }
 
@@ -181,20 +128,6 @@ const clickThisId = id => {
 // handles the notification switch change event
 const handleNotificationChange = async e => {
   await toggleAskNotificationPermisstions(e)
-  trackClickEvent(
-    'Click Tracking - General switch',
-    'Settings Sidebar - Notifications',
-    currentUserProfile.receive_general_notifications
-  )
-}
-
-// handle the delete account sidebar when the user clicks on the delete account link
-const onDeleteAccountClick = () => {
-  trackClickEvent(
-    'Click Tracking - delete account',
-    'Delete Account Sidebar - user section'
-  )
-  accountDeleteSideBar.value = true
 }
 </script>
 
@@ -237,24 +170,6 @@ const onDeleteAccountClick = () => {
         <p :class="[{ disabled: isDisabled }]">*********</p>
       </SBox>
     </section>
-    <section class="listening-preferences p-0">
-      <div class="flex s-title-holder">
-        <div class="s-title">Listening Preferences</div>
-      </div>
-      <SBox label="Default stream" @labelClick="clickThisId('default-stream')">
-        <DropupMenu
-          id="default-stream"
-          v-model:data.sync="currentUserProfile.default_live_stream"
-          :options="stationsMenuData"
-          optionLabel="station"
-          placeholder="Select a station"
-          label="Default stream"
-          width="80%"
-          class="-mr-2"
-          @change="onUpdateStation"
-        />
-      </SBox>
-    </section>
     <section v-if="isApp" class="notifications p-0">
       <div class="flex s-title-holder">
         <div class="s-title">Notifications</div>
@@ -286,109 +201,36 @@ const onDeleteAccountClick = () => {
           @change="onUpdateTextSize"
         />
       </SBox>
-      <SBox label="Dark theme" :ripple="false">
-        <VInputSwitch
-          yes="ON"
-          no="OFF"
-          static-width
-          v-model:data.sync="currentUserProfile.dark_mode"
-          @change="
-            () => {
-              setDarkMode(currentUserProfile.dark_mode)
-              trackClickEvent(
-                'Click Tracking - Dark theme',
-                'Settings Sidebar - Display',
-                currentUserProfile.dark_mode
-              )
-            }
-          "
-        />
-      </SBox>
     </section>
     <section class="wnyc p-0">
       <div class="flex s-title-holder">
-        <div class="s-title">WNYC</div>
+        <div class="s-title">Support</div>
       </div>
-      <!-- <SBox
-        label="Member Center"
-        link="https://pledge.wnyc.org/user/email-link"
-        @linkClick="
-          (link) => {
-            trackClickEvent(
-              'Click Tracking - Member Center',
-              'Settings Sidebar - links',
-              link
-            )
-          }
-        "
-      ></SBox> -->
       <SBox
         label="Donate"
-        :link="config.public.SETTINGS_MENU_DONATION_URL"
+        link="https://somniasounds.com/donate"
         :ripple="false"
-        @linkClick="
-          link => {
-            trackClickEvent(
-              'Click Tracking - Donate',
-              'Settings Sidebar - links',
-              link
-            )
-          }
-        "
-      ></SBox>
+      />
       <SBox
-        label="Submit app feedback"
-        link="https://www.surveymonkey.com/r/wnyc-app-feedback-settings-menu"
+        label="Tech support"
+        link="https://somniasounds.com/contact"
         :ripple="false"
-        @linkClick="
-          link => {
-            trackClickEvent(
-              'Click Tracking - Submit app feedback',
-              'Settings Sidebar - links',
-              link
-            )
-          }
-        "
-      ></SBox>
-      <SBox
-        label="Get tech support"
-        link="https://newyorkpublicradio.my.site.com/wnyc/s/website-or-app-support"
-        :ripple="false"
-        @linkClick="
-          link => {
-            trackClickEvent(
-              'Click Tracking - Get tech support',
-              'Settings Sidebar - links',
-              link
-            )
-          }
-        "
-      ></SBox>
+      />
       <SBox
         label="Contact us"
-        link="https://newyorkpublicradio.my.site.com/wnyc/s/"
+        link="https://somniasounds.com/contact"
         :ripple="false"
-        @linkClick="
-          link => {
-            trackClickEvent(
-              'Click Tracking - Contact Us',
-              'Settings Sidebar - links',
-              link
-            )
-          }
-        "
-      ></SBox>
+      />
       <SBox
         v-if="currentUser"
-        :is-link="true"
         label="Delete account"
+        link="https://somniasounds.com/delete-account"
         :ripple="false"
-        @click="onDeleteAccountClick"
-      ></SBox>
+      />
     </section>
     <section class="footer mb-4">
-      <WnycLogo style="fill: var(--night)" />
-      <p>© {{ getYear() }} New York Public Radio. All rights reserved.</p>
+      <Logo class="mb-3" />
+      <p>© {{ getYear() }} Somnia Sounds. All rights reserved.</p>
       <p>Version {{ config.public.APP_VERSION }}</p>
     </section>
     <Transition name="zoom">
@@ -398,8 +240,9 @@ const onDeleteAccountClick = () => {
         :severity="severity"
         :closable="false"
         :sticky="false"
-        >{{ theMessage }}</Message
       >
+        {{ theMessage }}
+      </Message>
     </Transition>
   </div>
 </template>
@@ -421,8 +264,6 @@ const onDeleteAccountClick = () => {
     .pi {
       color: var(--text-color);
     }
-  }
-  .user {
   }
   .user-preferences {
     p.disabled {
@@ -479,6 +320,9 @@ const onDeleteAccountClick = () => {
         width: 100%;
         @include font-config($type-paragraph1);
       }
+    }
+    .p-inputtext {
+      background-color: transparent;
     }
   }
   .p-button.p-button-icon-only {

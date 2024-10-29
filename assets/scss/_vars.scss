@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
 @import './breakpoints';
 
 $mobileBreakpoint: '<md';
@@ -10,7 +10,7 @@ $colors: (
     'background3': #e8e8e8,
     'background4': #333333,
     'dark-blue': #060027,
-    'blue': #244873,
+    'blue': #120175,
     'stroke': #eaeaea,
     'night': #101012,
     'red': #de1e3d,
@@ -20,15 +20,15 @@ $colors: (
     'error': #ff0000,
     'black': #000000,
     'info': #70c5f6,
-    'purple': #7b4ee2,
+    'purple': #4e28a7,
     'secondary': #999999,
     'link': #2b6f99,
-    'teal-lake': #298c9a,
-    'electric-violet': #9747ff,
-    'honolulu-blue': #0b7bbc,
+    'teal': #298c9a,
+    'violet': #9747ff,
+    'light-blue': #0b7bbc,
     'berry': #bb339e,
-    'spanish-orange': #f06000,
-    'sea-green': #469c78
+    'orange': #F94127,
+    'green': #469c78
 );
 
 $colors-dark-mode: (
@@ -37,7 +37,7 @@ $colors-dark-mode: (
     'background3': #ffffff1a,
     'background4': #13182a,
     'dark-blue': #060027,
-    'blue': #244873,
+    'blue': #120175,
     'stroke': #1b223c,
     'night': #ffffff,
     'red': #de1e3d,
@@ -47,15 +47,15 @@ $colors-dark-mode: (
     'error': #fd5757,
     'black': #000000,
     'info': #70c5f6,
-    'purple': #7b4ee2,
+    'purple': #4e28a7,
     'secondary': #999999,
     'link': #ffffff,
-    'teal-lake': #298c9a,
-    'electric-violet': #9747ff,
-    'honolulu-blue': #0b7bbc,
+    'teal': #298c9a,
+    'violet': #9747ff,
+    'light-blue': #0b7bbc,
     'berry': #bb339e,
-    'spanish-orange': #f06000,
-    'sea-green': #469c78
+    'orange': #F94127,
+    'green': #469c78
 );
 
 $backgroundGradient1: linear-gradient(to top, #060027, #000000);
@@ -85,8 +85,8 @@ $shade800: map-get($colors, 'background3') !default; //unused
 $shade900: #121619 !default; //unused
 
 //global
-$fontFamily: 'Poiret One', sans-serif !default;
-$fontFamilyHeader: 'Poiret One', sans-serif !default;
+$fontFamily: 'Comfortaa', sans-serif !default;
+$fontFamilyHeader: 'Comfortaa', sans-serif !default;
 $fontSize: 1rem !default;
 $fontRatio: 1.125;
 $fontRatioLarge: 1.333;
