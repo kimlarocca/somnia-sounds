@@ -65,7 +65,7 @@ const closeAll = () => {
         redirectUrl="https://demo.native-app.wnyc.org"
       >
         <template #aboveSubmit>
-          <p class="mb-3">
+          <p class="mb-3 text-xs">
             By proceeding to create your account, you are agreeing to Somnia
             Sounds'
             <nuxt-link to="https://somniasounds.com/terms">

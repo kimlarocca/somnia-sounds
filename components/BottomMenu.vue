@@ -92,7 +92,6 @@ const menuClick = item => {
         color: #ffffff;
         border-color: rgba(0, 0, 0, 0);
         border: none;
-        opacity: 0.6;
         text-align: center;
         box-shadow: none;
         flex-grow: 1;

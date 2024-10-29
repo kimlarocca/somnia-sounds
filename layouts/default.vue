@@ -10,7 +10,8 @@ useHead({
 <template>
   <div class="page" :class="[`${String(route.name)}`]">
     <div class="top-safe-cover" />
-    <header :class="[{ show: route.name === 'home' }]" class="mb-3">
+    <!-- <header :class="[{ show: route.name === 'home' }]" class="mb-3"> -->
+    <header class="show mb-3">
       <VSmartHeader :hero-buffer="400" :resume-delay="0">
         <TheHeader />
       </VSmartHeader>
