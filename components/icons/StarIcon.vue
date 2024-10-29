@@ -28,9 +28,18 @@ const props = defineProps({
   path {
     fill: var(--text-color);
   }
+  &.favorite {
+    width: 24px;
+    height: 24px;
+  }
   &.active {
     path {
       fill: var(--light-blue);
+    }
+  }
+  &.favorited {
+    path {
+      fill: var(--orange);
     }
   }
 }

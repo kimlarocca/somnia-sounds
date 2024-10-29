@@ -325,7 +325,7 @@ onUnmounted(() => {
     justify-content: flex-end;
   }
   .ans {
-    @include font-config($type-paragraph1);
+    @include font-config($type-paragraph);
   }
   &.customButton .p-dropdown-label {
     justify-content: center;

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import PlayIcon from "~/components/icons/PlayIcon.vue"
-import PauseIcon from "~/components/icons/PauseIcon.vue"
+import PlayIcon from '~/components/icons/PlayIcon.vue'
+import PauseIcon from '~/components/icons/PauseIcon.vue'
 import {
   useCurrentEpisode,
   useIsStreamLoading,
   useIsEpisodePlaying,
   useCurrentEpisodeDuration,
-  useCurrentEpisodeProgress,
-} from "~/composables/states"
+  useCurrentEpisodeProgress
+} from '~/composables/states'
 
 const isEpisodePlaying = useIsEpisodePlaying()
 const currentEpisode = useCurrentEpisode()
@@ -18,40 +18,42 @@ const currentEpisodeProgress = useCurrentEpisodeProgress()
 const props = defineProps({
   label: {
     type: String,
-    default: "Play",
+    default: 'Play'
   },
   live: {
     type: Boolean,
-    default: false,
+    default: false
   },
   isDownloaded: {
     type: Boolean,
-    default: false,
+    default: false
   },
   progress: {
     type: Number,
-    default: 0,
+    default: 0
   },
   index: {
     type: Number,
-    default: 0,
+    default: 0
   },
-  /* file filed to match up agaist or, if playing a downloaded file, the directoryAudio.name to match up against */
+  /* file filed to match up against or, if playing a downloaded file, the directoryAudio.name to match up against */
   data: {
     default: {},
-    type: Object,
-  },
+    type: Object
+  }
 })
 
-const emit = defineEmits(["on-click"])
+const emit = defineEmits(['on-click'])
 
 // handles the click event
 const togglePlay = () => {
-  emit("on-click")
+  emit('on-click')
 }
 
 const getProgress = computed(() => {
-  return Math.ceil((currentEpisodeProgress.value / currentEpisodeDuration.value) * 100)
+  return Math.ceil(
+    (currentEpisodeProgress.value / currentEpisodeDuration.value) * 100
+  )
 })
 
 const isPlaying = ref(false)
@@ -60,13 +62,15 @@ watch(
   () => {
     // to handle segments\
     if (Array.isArray(props.data.audio)) {
-      isPlaying.value = currentEpisode.value?.file === props.data?.audio[props.index]
+      isPlaying.value =
+        currentEpisode.value?.file === props.data?.audio[props.index]
     } else {
-      isPlaying.value = Number(currentEpisode.value?.id) === Number(props.data?.id)
+      isPlaying.value =
+        Number(currentEpisode.value?.id) === Number(props.data?.id)
     }
   },
   {
-    immediate: true,
+    immediate: true
   }
 )
 </script>

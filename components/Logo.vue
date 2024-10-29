@@ -23,6 +23,6 @@
 <style lang="scss" scoped>
 .logo {
   fill: var(--white);
-  height: 30px;
+  height: 29px;
 }
 </style>

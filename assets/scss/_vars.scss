@@ -6,7 +6,7 @@ $page-gutter-padding: 32px;
 
 $colors: (
     'background': #ffffff,
-    'background2': #f5f5f5,
+    'background2': rgba(255, 255, 255, 0.1),
     'background3': #e8e8e8,
     'background4': #333333,
     'dark-blue': #060027,
@@ -33,7 +33,7 @@ $colors: (
 
 $colors-dark-mode: (
     'background': #1b223c,
-    'background2': #1b223c,
+    'background2': rgba(255, 255, 255, 0.1),
     'background3': #ffffff1a,
     'background4': #13182a,
     'dark-blue': #060027,

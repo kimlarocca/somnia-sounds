@@ -284,7 +284,7 @@ const handleNotificationChange = async e => {
   }
   .p-inplace {
     .p-inplace-display {
-      @include font-config($type-paragraph1);
+      @include font-config($type-paragraph);
     }
   }
   .p-button.p-button-icon-only {
@@ -310,7 +310,7 @@ const handleNotificationChange = async e => {
       position: relative;
       display: block;
       text-align: right;
-      @include font-config($type-paragraph1);
+      @include font-config($type-paragraph);
     }
     .p-inplace-content {
       display: flex;
@@ -318,7 +318,7 @@ const handleNotificationChange = async e => {
       .p-inputtext {
         text-align: right;
         width: 100%;
-        @include font-config($type-paragraph1);
+        @include font-config($type-paragraph);
       }
     }
     .p-inputtext {
