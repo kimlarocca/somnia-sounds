@@ -6,8 +6,6 @@ import {
   useForgotPasswordSideBar
 } from '~/composables/states'
 
-import { trackClickEvent } from '~/utilities/helpers'
-
 const settingsSideBar = useSettingSideBar()
 const signUpSideBar = useSignupSideBar()
 const loginSideBar = useLoginSideBar()
@@ -22,18 +20,8 @@ const onSignupClick = () => {
   signUpSideBar.value = true
 }
 
-// actions to be taken with the login link is clicked
-const onLogin = provider => {
-  trackClickEvent(
-    'Click Tracking - log in',
-    'Log In Sidebar - user section',
-    provider
-  )
-}
-
 // close all sidebars
 const closeAll = () => {
-  onLogin('email')
   loginSideBar.value = false
   signUpSideBar.value = false
   settingsSideBar.value = false
@@ -63,7 +51,6 @@ const openForgotPassword = () => {
         label="Log in with Google"
         severity="secondary"
         class="center my-3"
-        @submit-success="onLogin('google')"
       />
       <SupabaseVLoginWithProvider
         :client="client"
@@ -72,7 +59,6 @@ const openForgotPassword = () => {
         label="Log in with Apple"
         severity="secondary"
         class="center"
-        @submit-success="onLogin('apple')"
       />
       <Divider class="my-4" align="center">
         <b>or</b>
@@ -87,9 +73,9 @@ const openForgotPassword = () => {
         <template #belowSubmit>
           <div class="mt-4 relative">
             <p class="text-center">
-              <nuxt-link to="#" @click="openForgotPassword"
-                >Forgot password?</nuxt-link
-              >
+              <nuxt-link to="#" @click="openForgotPassword">
+                Forgot password?
+              </nuxt-link>
             </p>
           </div>
         </template>

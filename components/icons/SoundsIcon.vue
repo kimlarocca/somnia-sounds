@@ -6,25 +6,24 @@ const props = defineProps({
   }
 })
 </script>
-
 <template>
   <svg
+    class="icon sounds-icon"
     :class="{ active: active }"
-    class="star-icon icon"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 32 32"
     role="img"
-    aria-label="star icon"
+    aria-label="sounds icon"
   >
     <path
-      d="M32 12.408l-11.056-1.607-4.944-10.018-4.944 10.018-11.056 1.607 8 7.798-1.889 11.011 9.889-5.199 9.889 5.199-1.889-11.011 8-7.798z"
+      d="M30 0h2v23c0 2.761-3.134 5-7 5s-7-2.239-7-5c0-2.761 3.134-5 7-5 1.959 0 3.729 0.575 5 1.501v-11.501l-16 3.556v15.444c0 2.761-3.134 5-7 5s-7-2.239-7-5c0-2.761 3.134-5 7-5 1.959 0 3.729 0.575 5 1.501v-19.501l18-4z"
     />
   </svg>
 </template>
 
 <style lang="scss" scoped>
-.star-icon {
+.sounds-icon {
   path {
     fill: var(--text-color);
   }

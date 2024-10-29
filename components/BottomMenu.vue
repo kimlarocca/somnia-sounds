@@ -1,19 +1,17 @@
 <script setup>
-import { ref, watch } from 'vue'
 import { useBottomMenuState } from '~/composables/states'
 import HomeIcon from './icons/HomeIcon.vue'
 import MoonIcon from './icons/MoonIcon.vue'
-import BrowseIcon from './icons/BrowseIcon.vue'
+import SoundsIcon from './icons/SoundsIcon.vue'
 import StarIcon from './icons/StarIcon.vue'
-import { capitalizeFirstLetter } from '~/utilities/helpers'
-const route = useRoute()
 
+const route = useRoute()
 const bottomMenuState = useBottomMenuState()
 const options = ref([
-  { icon: markRaw(HomeIcon), value: 'home', slug: '/home' },
-  { icon: markRaw(MoonIcon), value: 'sleep', slug: '/home' },
-  { icon: markRaw(BrowseIcon), value: 'sounds', slug: '/home' },
-  { icon: markRaw(StarIcon), value: 'saved', slug: '/saved' }
+  { icon: markRaw(HomeIcon), value: 'Home', slug: '/home' },
+  { icon: markRaw(MoonIcon), value: 'Sleep', slug: '/home' },
+  { icon: markRaw(SoundsIcon), value: 'Sounds', slug: '/sounds' },
+  { icon: markRaw(StarIcon), value: 'Saved', slug: '/saved' }
 ])
 
 // if another trigger changes the route, update the bottom menu state
@@ -38,7 +36,7 @@ const menuClick = item => {
   <div class="bottom-menu">
     <div class="buttons-holder">
       <template v-for="item in options" :key="item.slug">
-        <NuxtLink :to="item.slug" class="link w-full" prefetch>
+        <nuxt-link :to="item.slug" class="link w-full" prefetch>
           <Button
             @click="menuClick(item)"
             class="w-full"
@@ -50,10 +48,10 @@ const menuClick = item => {
                 :active="bottomMenuState.value == item.value"
               >
               </component>
-              {{ capitalizeFirstLetter(item.value) }}
+              {{ item.value }}
             </div>
           </Button>
-        </NuxtLink>
+        </nuxt-link>
       </template>
     </div>
   </div>
@@ -102,9 +100,9 @@ const menuClick = item => {
         text-decoration: none;
         .icon {
           flex: none;
-          width: 28px;
-          height: 28px;
-          fill: var(--bottom-menu-icon-color);
+          width: 25px;
+          height: 25px;
+          margin-bottom: 8px;
         }
         .item {
           display: flex;
@@ -112,7 +110,7 @@ const menuClick = item => {
           align-items: center;
           font-size: 12px;
           line-height: 15px;
-          font-weight: var(--font-weight-500);
+          font-weight: var(--font-weight-300);
           font-family: var(--font-family-header);
           text-decoration: none;
         }

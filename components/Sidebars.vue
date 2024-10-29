@@ -1,5 +1,4 @@
 <script setup>
-import { trackClickEvent } from "~/utilities/helpers"
 import {
   useSettingSideBar,
   useLoginSideBar,
@@ -7,9 +6,8 @@ import {
   useForgotPasswordSideBar,
   useEditProfileSideBar,
   useAccountPromptSideBar,
-  useAccountDeleteSideBar,
-  useSleepTimerSideBar,
-} from "~/composables/states"
+  useSleepTimerSideBar
+} from '~/composables/states'
 
 const settingsSideBar = useSettingSideBar()
 const loginSideBar = useLoginSideBar()
@@ -17,7 +15,6 @@ const signinSideBar = useSignupSideBar()
 const forgotPasswordSideBar = useForgotPasswordSideBar()
 const editProfileSideBar = useEditProfileSideBar()
 const accountPromptSideBar = useAccountPromptSideBar()
-const accountDeleteSideBar = useAccountDeleteSideBar()
 const sleepTimerSideBar = useSleepTimerSideBar()
 </script>
 
@@ -29,15 +26,6 @@ const sleepTimerSideBar = useSleepTimerSideBar()
       position="right"
       class="w-full"
       id="settings-sidebar"
-      @hide="
-        () => {
-          trackClickEvent(
-            'Click Tracking - Settings Sidebar Close Button',
-            'Settings Sidebar',
-            `close sidebar`
-          )
-        }
-      "
     >
       <template #header><span></span></template>
       <Settings />
@@ -49,17 +37,7 @@ const sleepTimerSideBar = useSleepTimerSideBar()
       class="w-full hideX"
       blockScroll
       id="login-sidebar"
-      @hide="
-        () => {
-          trackClickEvent(
-            'Click Tracking - Login Sidebar Close Button',
-            'Login Sidebar',
-            `close sidebar`
-          )
-        }
-      "
     >
-      <!-- <template #header><h1 class="font-medium">Log in</h1></template> -->
       <Login />
     </Sidebar>
     <Sidebar
@@ -69,15 +47,6 @@ const sleepTimerSideBar = useSleepTimerSideBar()
       class="w-full hideX"
       blockScroll
       id="signin-sidebar"
-      @hide="
-        () => {
-          trackClickEvent(
-            'Click Tracking - Sign in Sidebar Close Button',
-            'Sign in Sidebar',
-            `close sidebar`
-          )
-        }
-      "
     >
       <Signup />
     </Sidebar>
@@ -88,19 +57,9 @@ const sleepTimerSideBar = useSleepTimerSideBar()
       class="w-full hideX"
       blockScroll
       id="forgot-password-sidebar"
-      @hide="
-        () => {
-          trackClickEvent(
-            'Click Tracking - Forgot Password Sidebar Close Button',
-            'Forgot Password Sidebar',
-            `close sidebar`
-          )
-        }
-      "
     >
       <ForgotPassword />
     </Sidebar>
-
     <Sidebar
       v-model:visible="editProfileSideBar"
       :baseZIndex="10003"
@@ -108,15 +67,6 @@ const sleepTimerSideBar = useSleepTimerSideBar()
       class="w-full hideX"
       blockScroll
       id="edit-profile-sidebar"
-      @hide="
-        () => {
-          trackClickEvent(
-            'Click Tracking - Edit Profile Sidebar Close Button',
-            'Edit Profile Sidebar',
-            `close sidebar`
-          )
-        }
-      "
     >
       <EditProfile />
     </Sidebar>
@@ -126,37 +76,9 @@ const sleepTimerSideBar = useSleepTimerSideBar()
       position="bottom"
       class="w-full hideX no-safe-area h-auto"
       id="account-prompt-sidebar"
-      @hide="
-        () => {
-          trackClickEvent(
-            'Click Tracking - Account Prompt Sidebar Close Button',
-            'Account Prompt Sidebar',
-            `close sidebar`
-          )
-        }
-      "
     >
       <AccountPromptSideBar />
     </Sidebar>
-    <Sidebar
-      v-model:visible="accountDeleteSideBar"
-      :baseZIndex="10003"
-      position="right"
-      class="w-full hideX"
-      id="account-delete-sidebar"
-      @hide="
-        () => {
-          trackClickEvent(
-            'Click Tracking - Account Delete Sidebar Close Button',
-            'Account Delete Sidebar',
-            `close sidebar`
-          )
-        }
-      "
-    >
-      <AccountDeleteSideBar />
-    </Sidebar>
-
     <Sidebar
       v-model:visible="sleepTimerSideBar"
       :baseZIndex="10003"
@@ -164,15 +86,6 @@ const sleepTimerSideBar = useSleepTimerSideBar()
       class="w-full hideX no-safe-area h-auto"
       :class="[{ hide: !sleepTimerSideBar }]"
       id="sleep-timer-sidebar"
-      @hide="
-        () => {
-          trackClickEvent(
-            'Click Tracking - Sleep Timer Sidebar Close Button',
-            'Sleep Timer Sidebar',
-            `close sidebar`
-          )
-        }
-      "
     >
       <SleepTimer />
     </Sidebar>

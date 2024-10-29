@@ -1,7 +1,6 @@
 import { computed } from 'vue'
 import { RemoteStreamer } from "@nypublicradio/capacitor-remote-streamer"
 import { localUserProfileKey } from "~/composables/globals"
-import { trackClickEvent } from "~/utilities/helpers"
 import {
     useIsEpisodePlaying,
     useTogglePlayTrigger,
@@ -101,11 +100,6 @@ export default function useSleepTimer() {
 
         sleepTimerSideBar.value = false
         sleepTimerRunning.value = false
-        trackClickEvent(
-            "Click Tracking - Sleep timer event",
-            "Sleep Timer - Ended",
-            sleepTimerSelectedTime.value.label
-        )
 
         // slowly decrease volume to 0
         const duration = 7000 // 10 seconds
@@ -144,22 +138,6 @@ export default function useSleepTimer() {
                 }
             }
         }, interval)
-
-        // if (isEpisodePlaying.value) {
-        //     togglePlayTrigger.value = !togglePlayTrigger.value
-        // }
-        // sleepTimerSideBar.value = false
-        // sleepTimerRunning.value = false
-        // trackClickEvent(
-        //     "Click Tracking - Sleep timer event",
-        //     "Sleep Timer - Ended",
-        //     sleepTimerSelectedTime.value.label
-        // )
-        // globalToast.value = {
-        //     severity: "success",
-        //     summary: "Audio Paused. Sleep Timer Ended.",
-        //     //life: 6000,
-        // }
     }
 
     // Update the duration, reset and start the timer
@@ -168,11 +146,6 @@ export default function useSleepTimer() {
         resetTimer()
         startTimer()
         sleepTimerSideBar.value = false
-        trackClickEvent(
-            "Click Tracking - Sleep timer duration",
-            "Sleep Timer Sidebar - Duration",
-            formattedTime
-        )
     }
 
     // Update the user preferences
@@ -197,14 +170,9 @@ export default function useSleepTimer() {
         return 90
     }
 
-    // handle the sleep timer side bar toggle and tracking
+    // handle the sleep timer side bar toggle
     function handleSleepTimer() {
         sleepTimerSideBar.value = !sleepTimerSideBar.value
-        trackClickEvent(
-            "Click Tracking - Sleep Timer",
-            "Expanded Audio Player",
-            currentEpisode.value?.title ?? "No audio selected"
-        )
     }
 
     return { sleepTimerSelectedTime, sleepTimerCurrentTime, sleepTimerRunning, formattedTime, startTimer, pauseTimer, resetTimer, onTimeEnd, onUpdateDuration, sleepTimerPaused, updateUserPreferences, getUserPreferenceSleepTime, handleSleepTimer }

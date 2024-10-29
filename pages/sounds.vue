@@ -17,14 +17,14 @@ useHead({
   <div>
     <Html lang="en">
       <Head>
-        <Title>Somnia Sounds | Home</Title>
-        <Meta name="og:title" content="Somnia Sounds | Home" />
-        <Meta name="twitter:title" content="Somnia Sounds | Home" />
+        <Title>Somnia Sounds | Sounds</Title>
+        <Meta name="og:title" content="Somnia Sounds | Sounds" />
+        <Meta name="twitter:title" content="Somnia Sounds | Sounds" />
       </Head>
     </Html>
 
     <section>
-      <h1 class="mb-4">Home</h1>
+      <h1 class="mb-4">Sounds</h1>
       <p>Coming soon!</p>
     </section>
   </div>

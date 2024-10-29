@@ -15,7 +15,6 @@ import {
   useIsDarkMode,
   useIsNetworkConnected,
   useIsLiveStream,
-  useAccountDeleteSideBar,
   useSettingSideBar,
 } from "~/composables/states"
 import { Capacitor } from "@capacitor/core"
@@ -261,33 +260,6 @@ export const imageSolver = (url, options = {}) => {
   return imgUrl
 }
 
-
-// function that tracks audio events to google analytics
-export const trackAudioEvent = (eventName, audioType, audioTitle, audioShow) => {
-  const { $analytics } = useNuxtApp()
-  const currentUser = useCurrentUser()
-  const deviceId = useDeviceId()
-  $analytics.sendEvent(eventName, {
-    audio_type: audioType,
-    audio_title: audioTitle,
-    audio_show: audioShow,
-    user_id: currentUser.value?.id ?? deviceId.value,
-  })
-}
-
-// function that tracks click events to google analytics
-export const trackClickEvent = (category, component, label) => {
-  const { $analytics } = useNuxtApp()
-  const currentUser = useCurrentUser()
-  const deviceId = useDeviceId()
-  $analytics.sendEvent("click_tracking", {
-    event_category: category,
-    component,
-    event_label: label,
-    user_id: currentUser.value?.id ?? deviceId.value,
-  })
-}
-
 /**
  * to get how long ago a date was
  */
@@ -497,7 +469,6 @@ export const shareAPI = async (
     url: content.url || content.titleLink, // titleLink is for live streams
   }
 
-  trackClickEvent("Click Tracking - Share", componentOfOrigin, shareContent.title)
   if (Capacitor.getPlatform() === "ios" || Capacitor.getPlatform() === "android") {
     await Share.share({
       // title: shareContent.title,
@@ -524,12 +495,6 @@ export const handleDelete = (file) => {
     summary: "Removed download.",
     life: 3000,
   }
-  // GA tracking
-  trackClickEvent(
-    "Click Tracking - Audio file delete",
-    "Episode Item",
-    `deleting = ${file.directoryAudio.name}`
-  )
 }
 
 // get the current user's favorited items
@@ -1012,12 +977,7 @@ export const addToFavorites2 = async ({ item, isFavorited, message = isFavorited
       severity: "info",
       summary: message,
       life: 3000,
-    };
-    trackClickEvent(
-      `Click Tracking - ${message}`,
-      "Episode Item",
-      item.title
-    );
+    }
   } else {
     accountPromptSideBar.value = true;
   }
@@ -1136,37 +1096,6 @@ export const logOutUser = async () => {
   getAndSetUserProfile()
 }
 
-// handle account deletion requests
-export const requestAccountDeletion = async () => {
-  const currentUserProfile = useCurrentUserProfile()
-  const accountDeleteSideBar = useAccountDeleteSideBar()
-  const settingsSideBar = useSettingSideBar()
-  const globalToast = useGlobalToast()
-
-  // post to zapier webhook
-  if (currentUserProfile.value?.id) {
-    await $fetch('https://hooks.zapier.com/hooks/catch/1135793/23fbxa5/', {
-      method: 'POST',
-      body: { "email": currentUserProfile.value?.email, "id": currentUserProfile.value?.id }
-    });
-  }
-
-  logOutUser()
-
-  // close the account delete and settings sidebars
-  accountDeleteSideBar.value = false
-  settingsSideBar.value = false
-
-  // send user to the sign in page
-  await navigateTo('/home')
-
-  // show toast confirmation of deletion request
-  globalToast.value = {
-    severity: "info",
-    summary: 'We have received your request to delete your account. Please allow 7-10 business days for your request to be processed.',
-    closable: true,
-  }
-}
 // Custom sorting function that ignores "A " and "The " at the beginning of titles
 export const customAlphabeticalSort = (key = 'title') => {
   return (a, b) => {

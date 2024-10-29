@@ -1,7 +1,6 @@
 <script setup>
 import { cmsSources } from '~/composables/globals'
 import {
-  trackClickEvent,
   shareAPI,
   templatizePublisherImageUrl,
   checkIsFavorited,
@@ -87,11 +86,6 @@ const progress = ref({})
 // handle the download of the audio file request and feed the progress
 const handleDownload = async () => {
   // update CapacitorJs filesystem
-  trackClickEvent(
-    'Click Tracking - Audio Download',
-    'Expanded Audio Player',
-    currentEpisode.value.title
-  )
   progress.value[currentEpisode.value.id] = await fetchAndStoreMp3(
     currentEpisode.value
   )
@@ -108,25 +102,6 @@ if (currentEpisode.value?.cmsSource === cmsSources.NPR) {
 const handleShare = () => {
   shareAPI(currentEpisode.value, 'Expanded Audio Player')
 }
-
-// const handleAddToQueue = () => {
-//   // toggle active state
-//   // update SB and LS with new state
-//   trackClickEvent(
-//     "Click Tracking - Add to Queue",
-//     "Expanded Audio Player",
-//     currentEpisode.value.title
-//   )
-// }
-
-// const handleMoreEpisodes = () => {
-//   // navitget to show page
-//   trackClickEvent(
-//     "Click Tracking - More Episodes",
-//     "Expanded Audio Player",
-//     currentEpisode.value.title
-//   )
-// }
 
 const isLive = computed(() => {
   return isLiveStream.value
@@ -264,11 +239,6 @@ const onMenuChange = e => {
 const moreFromClick = () => {
   const title = currentEpisode.value.showTitle || currentEpisode.value.title
   const slug = currentEpisode.value.showSlug || currentEpisode.value.show
-  trackClickEvent(
-    `Click Tracking - Expanded Audio Player More from ${title}`,
-    'Expanded Audio Player',
-    title
-  )
   emit('close-panel')
   navigateTo(`/browse/shows/${slug}`)
 }

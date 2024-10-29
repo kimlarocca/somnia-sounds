@@ -10,13 +10,11 @@ useHead({
 <template>
   <div class="page" :class="[`${String(route.name)}`]">
     <div class="top-safe-cover" />
-
-    <header :class="[{ show: route.name === 'home' }]">
+    <header :class="[{ show: route.name === 'home' }]" class="mb-3">
       <VSmartHeader :hero-buffer="400" :resume-delay="0">
         <TheHeader />
       </VSmartHeader>
     </header>
-
     <main>
       <div class="content">
         <slot />
@@ -39,6 +37,7 @@ header.show {
   }
 }
 </style>
+
 <style lang="scss" scoped>
 .content {
   z-index: 10;

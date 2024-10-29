@@ -26,8 +26,6 @@ import {
   useGlobalToast
 } from '~/composables/states'
 import {
-  trackAudioEvent,
-  trackClickEvent,
   templatizePublisherImageUrl,
   getDate,
   hasQueryParams,
@@ -89,11 +87,6 @@ const getTitle = computed(() => {
 
 /*function that updated the global useIsPlayerMinimized */
 const updateUseIsPlayerMinimized = e => {
-  trackClickEvent(
-    'Click Tracking - Audio Player minimized',
-    'Audio Player',
-    `minimized = ${e}`
-  )
   isPlayerMinimized.value = e
 }
 
@@ -152,24 +145,12 @@ const switchEpisode = async val => {
 // function that handles the skip to time with the plugin
 const handleSkipTo = e => {
   RemoteStreamer.seekTo({ position: e })
-  trackAudioEvent(
-    'skip',
-    getMediaType.value,
-    getTitle.value,
-    getDescription.value
-  )
 }
 //
 const handleSeekTo = e => {
   // convert the percentage to the time
   const time = (e / 100) * currentEpisodeDuration.value
   RemoteStreamer.seekTo({ position: time })
-  trackAudioEvent(
-    'seek',
-    getMediaType.value,
-    getTitle.value,
-    getDescription.value
-  )
 }
 
 // handle the toggle play button and tracking
@@ -181,21 +162,6 @@ const togglePlayHere = async e => {
   if (!e && isEpisodePlaying.value) {
     await RemoteStreamer.pause()
     isEpisodePlaying.value = false
-  }
-  if (isEpisodePlaying.value && isNewEpisode.value) {
-    trackAudioEvent(
-      'play',
-      getMediaType.value,
-      getTitle.value,
-      getDescription.value
-    )
-  } else if (isEpisodePlaying.value && !isNewEpisode.value) {
-    trackAudioEvent(
-      'resume',
-      getMediaType.value,
-      getTitle.value,
-      getDescription.value
-    )
   }
   isEpisodePlaying.value = e
   isNewEpisode.value = false
@@ -225,18 +191,10 @@ const handleError = e => {
       life: 6000,
       closable: true
     }
-
     if (isEpisodePlaying.value) {
       playerRef.value.togglePlay()
       isEpisodePlaying.value = false
     }
-
-    trackAudioEvent(
-      'audio error',
-      isLiveStream.value ? 'live' : 'on_demand',
-      getTitle.value,
-      getDescription.value
-    )
   }
 }
 
@@ -254,7 +212,6 @@ const episodeEnded = () => {
     currentEpisode.value = null
     handleIsExpanded(false)
   }
-  trackAudioEvent('ended', 'on_demand', getTitle.value, getDescription.value)
 }
 
 // resume the player if the network is connected where they left off
@@ -332,12 +289,6 @@ onMounted(async () => {
   await RemoteStreamer.addListener('pause', () => {
     if (isEpisodePlaying.value) {
       isEpisodePlaying.value = false
-      trackAudioEvent(
-        'pause',
-        getMediaType.value,
-        getTitle.value,
-        getDescription.value
-      )
     }
   })
 
@@ -358,12 +309,6 @@ onMounted(async () => {
     // this is work webview detecting the end of the audio
     if (e?.ended) {
       episodeEnded()
-      trackAudioEvent(
-        'ended',
-        getMediaType.value,
-        getTitle.value,
-        getDescription.value
-      )
     }
   })
   await RemoteStreamer.addListener('ended', e => {
@@ -372,12 +317,6 @@ onMounted(async () => {
     currentEpisodeProgress.value = 0
     if (e.ended) {
       episodeEnded()
-      trackAudioEvent(
-        'ended',
-        getMediaType.value,
-        getTitle.value,
-        getDescription.value
-      )
     }
   })
 })
