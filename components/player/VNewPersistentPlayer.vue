@@ -20,13 +20,6 @@ const props = defineProps({
     type: Boolean
   },
   /**
-   * get if the audio is a live stream or on demand
-   */
-  isLiveStream: {
-    default: false,
-    type: Boolean
-  },
-  /**
    * get if the audio duration
    */
   currentEpisodeDuration: {
@@ -296,7 +289,6 @@ const emit = defineEmits([
 
 const isStreamLoading = computed(() => props.isStreamLoading)
 const isEpisodePlaying = computed(() => props.isEpisodePlaying)
-const isLiveStream = computed(() => props.isLiveStream)
 const currentEpisodeDuration = computed(() => props.currentEpisodeDuration)
 const currentEpisodeProgress = computed(() => props.currentEpisodeProgress)
 
@@ -570,28 +562,14 @@ defineExpose({
             class="track-info-image flex-none"
             :class="[{ hideImageOnMobile: props.hideImageOnMobile }]"
           />
-
           <div
             class="flex h-full w-full align-items-center gap-2 px-2 relative"
           >
             <VNewTrackInfo
               v-bind="{ ...$props, ...$attrs }"
-              :livestream="isLiveStream"
               :class="[{ 'cursor-pointer': props.canClickAnywhere }]"
-              @description-click="emit('description-click')"
-              @title-click="emit('title-click')"
               @click="handleClickAnywhere"
             />
-            <!-- <Transition name="skipBtnL">
-              <Button
-                v-if="props.showSkip && !isLiveStream"
-                class="media-button flex-none p-button-icon-only"
-                severity="secondary"
-                @click="skipBack"
-              >
-                <slot name="skipBack"><i class="pi pi-undo"></i></slot>
-              </Button>
-            </Transition> -->
             <Button
               ref="playButtonRef"
               :disabled="isStreamLoading"
@@ -608,23 +586,6 @@ defineExpose({
               ></slot>
               <slot v-else name="pause"><i class="pi pi-pause"></i></slot>
             </Button>
-            <!-- <Transition name="skipBtnR">
-              <Button
-                v-if="props.showSkip && !isLiveStream"
-                class="media-button flex-none p-button-icon-only p-button-secondary"
-                severity="secondary"
-                @click="skipAhead"
-              >
-                <slot name="skipAhead"><i class="pi pi-refresh"></i></slot>
-              </Button>
-            </Transition> -->
-            <player-v-timeline
-              v-if="!isLiveStream"
-              :currentEpisodeProgress
-              :currentEpisodeDuration
-              :isLiveStream
-              minimized
-            />
           </div>
         </div>
       </div>
@@ -683,88 +644,32 @@ defineExpose({
               </div>
             </slot>
           </div>
-          <div class="flex flex-column header-top">
-            <slot name="header-content"></slot>
-
-            <div class="flex flex-column gap-3">
-              <!--   <pre class="text-xs">{{ currentEpisode }}</pre> -->
-
-              <div v-if="isLiveStream" class="flex flex-column gap-2">
-                <div class="live flex gap-2 align-items-center">
-                  <div class="media-live-indicator">
-                    <span class="media-live-indicator-text">Live</span>
-                  </div>
-                  <div class="text-sm">{{ props.station }}</div>
-                </div>
-                <slot name="expanded-player-title">{{ props.title }}</slot>
-              </div>
-
-              <div v-else>
-                <slot name="expanded-player-title">{{ props.title }}</slot>
-              </div>
-            </div>
-
-            <div class="expandedViewPlayer mt-5">
-              <player-v-timeline
-                v-if="!isLiveStream"
-                :currentEpisodeProgress
-                :currentEpisodeDuration
-                :isLiveStream
-                @scrub-timeline-end="emit('scrub-timeline-end', $event)"
-                @scrub-timeline-change="emit('scrub-timeline-change', $event)"
-                @scrub-timeline-click="emit('scrub-timeline-click', $event)"
-              />
-
-              <div
-                class="mt-2 flex justify-content-center align-items-center gap-2"
-              >
-                <!--
-                <Transition name="skipBtnL">
-                  <Button
-                    v-if="!isLiveStream"
-                    class="media-button flex-none p-button-icon-only"
-                    severity="secondary"
-                    @click="skipBack"
-                  >
-                    <slot name="skipBack"><i class="pi pi-undo"></i></slot>
-                  </Button>
-                </Transition>
-                -->
-                <Button
-                  ref="playButtonRef"
-                  :disabled="isStreamLoading"
-                  class="media-button media-button-expanded-play play-button p-button-icon-only"
-                  :aria-label="
-                    isEpisodePlaying ? 'Pause button' : 'Play button'
-                  "
-                  @click="togglePlay"
-                  severity="secondary"
-                >
-                  <slot v-if="isStreamLoading" name="loading">
-                    <i class="pi pi-spin pi-spinner"></i>
-                  </slot>
-                  <slot v-else-if="!isEpisodePlaying" name="play"
-                    ><i class="pi pi-play"></i
-                  ></slot>
-                  <slot v-else name="pause"><i class="pi pi-pause"></i></slot>
-                </Button>
-                <!--
-                <Transition name="skipBtnR">
-                  <Button
-                    v-if="!isLiveStream"
-                    class="media-button flex-none p-button-icon-only p-button-secondary"
-                    severity="secondary"
-                    @click="skipAhead"
-                  >
-                    <slot name="skipAhead"><i class="pi pi-refresh"></i></slot>
-                  </Button>
-                </Transition>
-                -->
-              </div>
-            </div>
+          <div class="flex flex-column text-center header-top">
+            <h3 class="mb-4">{{ title }}</h3>
+            <img
+              :alt="title"
+              v-if="image"
+              :src="image"
+              class="expanded-player-image border-radius mb-4"
+            />
+            <Button
+              ref="playButtonRef"
+              :disabled="isStreamLoading"
+              class="m-auto mb-2 media-button media-button-expanded-play play-button p-button-icon-only"
+              :aria-label="isEpisodePlaying ? 'Pause button' : 'Play button'"
+              @click="togglePlay"
+              severity="secondary"
+            >
+              <slot v-if="isStreamLoading" name="loading">
+                <i class="pi pi-spin pi-spinner"></i>
+              </slot>
+              <slot v-else-if="!isEpisodePlaying" name="play"
+                ><i class="pi pi-play"></i
+              ></slot>
+              <slot v-else name="pause"><i class="pi pi-pause"></i></slot>
+            </Button>
+            <slot name="expanded-content"></slot>
           </div>
-
-          <slot name="expanded-content"></slot>
         </div>
       </div>
     </Transition>
@@ -1055,9 +960,6 @@ $container-breakpoint-md: useBreakpointOrFallback('md', 768px);
     .o-icon {
       width: 20px;
       height: 20px;
-      path {
-        fill: var(--white);
-      }
     }
     &.play-button {
       .play-icon {
@@ -1078,7 +980,7 @@ $container-breakpoint-md: useBreakpointOrFallback('md', 768px);
 
   @media (hover: hover) and (pointer: fine) {
     .media-button:hover {
-      background: var(--persistent-player-button-bg-color-hover);
+      opacity: 0.8;
     }
   }
 

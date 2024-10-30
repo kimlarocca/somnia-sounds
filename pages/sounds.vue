@@ -3,6 +3,8 @@ import { useCurrentEpisode, useTogglePlayTrigger } from '~/composables/states'
 import { saveRecentlyPlayed, prepForPlayer } from '~/utilities/helpers'
 
 const currentEpisode = useCurrentEpisode()
+const searchFieldValue = ref('')
+const showSearchBar = ref(false)
 const togglePlayTrigger = useTogglePlayTrigger()
 
 definePageMeta({
@@ -26,6 +28,14 @@ const items = ref([
     tease: 'Fall asleep with this soothing piano music by Beethoven.',
     image: 'https://placehold.co/248',
     audio: 'https://www.kimlarocca.com/fur-elise.mp3'
+  },
+  {
+    id: 2,
+    estimatedDuration: 60,
+    title: 'Fur Elise 2',
+    tease: '222 Fall asleep with this soothing piano music by Beethoven.',
+    image: 'https://placehold.co/350',
+    audio: 'https://www.kimlarocca.com/fur-elise.mp3'
   }
 ])
 
@@ -43,28 +53,81 @@ const togglePlayHere = item => {
   <div>
     <Html lang="en">
       <Head>
-        <Title>Somnia Sounds | Sounds</Title>
+        <Title>Somnia Sounds | Explore</Title>
         <Meta name="og:title" content="Somnia Sounds | Sounds" />
         <Meta name="twitter:title" content="Somnia Sounds | Sounds" />
       </Head>
     </Html>
 
     <section>
-      <h1 class="mb-5">infinite soundscapes</h1>
-      <p class="mb-5">current episode: {{ currentEpisode }}</p>
-      <Card v-for="item in items" :key="item.id" :item="item">
-        <template #play>
-          <PlayButton
-            v-if="item.audio"
-            :data="item"
-            @onClick="togglePlayHere(item)"
-            class="z-2"
-          />
-        </template>
-        <template #favorite>
-          <StarIcon class="favorite" />
-        </template>
-      </Card>
+      <h1 class="mb-5">explore</h1>
+      <div class="flex align-items-center gap-2 mb-5">
+        <Button
+          class="topic-btn text-sm white-space-nowrap"
+          label="sounds"
+          :aria-label="`sounds category button`"
+        />
+        <Button
+          class="topic-btn text-sm white-space-nowrap"
+          label="infinite soundscapes"
+          :aria-label="`infinite soundscapes category button`"
+        />
+        <Button
+          class="topic-btn text-sm white-space-nowrap"
+          label="meditations"
+          :aria-label="`meditations category button`"
+        />
+        <Button
+          class="closer"
+          rounded
+          text
+          plain
+          icon="pi pi-search"
+          aria-label="search"
+          @click="showSearchBar = !showSearchBar"
+        />
+      </div>
+      <Transition name="fade">
+        <div v-if="showSearchBar" class="mb-4">
+          <span class="p-input-icon-left w-full">
+            <i v-if="isSearching" class="pi pi-spin pi-spinner text-color" />
+            <i v-else class="pi pi-search text-color" />
+            <InputText
+              v-model="searchFieldValue"
+              placeholder="keyword search"
+              class="search-field w-full"
+            />
+            <Button
+              v-if="searchFieldValue"
+              class="closer"
+              rounded
+              text
+              plain
+              icon="pi pi-times"
+              aria-label="clear search"
+              @click="clearSearchField"
+            />
+          </span>
+        </div>
+      </Transition>
+      <h3 class="mb-4">Sounds</h3>
+      <div class="grid">
+        <div class="col col-6" v-for="item in items" :key="item.id">
+          <Card :item="item">
+            <template #play>
+              <PlayButton
+                v-if="item.audio"
+                :data="item"
+                @onClick="togglePlayHere(item)"
+                class="z-2"
+              />
+            </template>
+            <template #favorite>
+              <StarIcon class="favorite" />
+            </template>
+          </Card>
+        </div>
+      </div>
     </section>
   </div>
 </template>

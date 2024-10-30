@@ -85,7 +85,7 @@ body {
 a {
   -webkit-touch-callout: none; /* disable the iOS long press action */
   -webkit-user-select: none; /* disable text selection */
-  color: var(--text-color);
+  color: var(--text-color)!important;
 }
 
 @mixin html-formatting() {
@@ -554,4 +554,8 @@ a:visited {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: 0 0 0.2rem 0.2rem #ffffff;
+}
+
+.border-radius {
+  border-radius: 8px;
 }

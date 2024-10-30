@@ -18,7 +18,7 @@ defineExpose({
 <template>
   <div v-if="item" class="card-large mb-4 p-ripple">
     <div class="top" v-if="item?.image">
-      <img :src="item.image" alt="item.title" />
+      <img :src="item.image" :alt="item.title" class="w-full" />
     </div>
     <div class="bottom flex flex-column gap-2 justify-content-between">
       <div class="flex flex-column gap-2">
@@ -41,7 +41,7 @@ defineExpose({
   flex-direction: column;
   border-radius: 8px;
   overflow: hidden;
-  max-width: 248px;
+  max-width: 100%;
   background-color: var(--background2);
   position: relative;
   .bottom {

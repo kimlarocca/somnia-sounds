@@ -1,59 +1,38 @@
 <script setup>
-import VFlexibleLink from "./VFlexibleLink.vue"
-import { computed } from "vue"
-
 const props = defineProps({
   description: {
     default: null,
-    type: String,
-  },
-  descriptionLink: {
-    default: null,
-    type: String,
+    type: String
   },
   hideDescriptionOnMobile: {
     default: false,
-    type: Boolean,
+    type: Boolean
   },
   hideTimeOnMobile: {
     default: false,
-    type: Boolean,
-  },
-  livestream: {
-    default: false,
-    type: Boolean,
+    type: Boolean
   },
   marquee: {
     default: false,
-    type: Boolean,
+    type: Boolean
   },
   marqueeDelay: {
-    default: "3s",
-    type: String,
+    default: '3s',
+    type: String
   },
   marqueeLoops: {
-    default: "1",
-    type: String,
+    default: '1',
+    type: String
   },
   marqueeSpeed: {
     default: 0.1,
-    type: Number,
-  },
-  station: {
-    default: null,
-    type: String,
+    type: Number
   },
   title: {
     default: null,
-    type: String,
-  },
-  titleLink: {
-    default: null,
-    type: String,
-  },
+    type: String
+  }
 })
-
-const emit = defineEmits(["title-click", "description-click"])
 
 const getMarqueeSpeed = computed(() => {
   const length = props.description?.length
@@ -65,29 +44,8 @@ const getMarqueeSpeed = computed(() => {
   <div class="track-info">
     <div class="track-info-details">
       <div class="overflow-hidden">
-        <div
-          v-if="props.livestream"
-          class="track-info-livestream flex gap-1 align-content-center"
-        >
-          <media-live-button class="media-live-button">
-            <span class="media-live-button-text">LIVE</span>
-          </media-live-button>
-          <!-- <div class="track-info-livestream-indicator">
-            <span class="track-info-livestream-indicator-text">Live</span>
-            <span class="track-info-livestream-indicator-dot pulse" />
-          </div> -->
-          <div class="track-info-livestream-station">{{ station }}</div>
-        </div>
         <div class="track-info-title">
-          <div v-if="title">
-            <VFlexibleLink
-              class="track-info-title-link title"
-              :to="props.titleLink || null"
-              @flexible-link-click="emit('title-click')"
-            >
-              <div v-html="title"></div>
-            </VFlexibleLink>
-          </div>
+          <div v-if="title" v-html="title" />
         </div>
         <div
           v-if="props.description"
@@ -95,42 +53,11 @@ const getMarqueeSpeed = computed(() => {
           :class="[
             {
               hideDescriptionOnMobile: props.hideDescriptionOnMobile,
-              marquee: props.marquee,
-            },
+              marquee: props.marquee
+            }
           ]"
         >
-          <VFlexibleLink
-            class="track-info-description-link"
-            :to="props.descriptionLink || null"
-            @flexible-link-click="emit('description-click')"
-          >
-            <div v-if="props.marquee" class="track-info-description-marquee">
-              <div>
-                <div class="news-message">
-                  <div
-                    class="content"
-                    v-html="`${props.description}&nbsp;&nbsp;-&nbsp;&nbsp;`"
-                  ></div>
-                </div>
-                <div class="news-message">
-                  <div
-                    class="content"
-                    v-html="`${props.description}&nbsp;&nbsp;-&nbsp;&nbsp;`"
-                  ></div>
-                </div>
-              </div>
-            </div>
-            <div v-else class="track-info-description" v-html="props.description"></div>
-          </VFlexibleLink>
-        </div>
-        <div
-          v-if="!props.livestream"
-          class="media-time-group track-info-time"
-          :class="[{ hideTimeOnMobile: props.hideTimeOnMobile }]"
-        >
-          <media-time class="media-time" type="current"></media-time>
-          <div class="media-time-divider">/</div>
-          <media-time class="media-time" type="duration"></media-time>
+          <div class="track-info-description" v-html="props.description" />
         </div>
       </div>
     </div>
@@ -138,7 +65,7 @@ const getMarqueeSpeed = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-$container-breakpoint-md: useBreakpointOrFallback("md", 768px);
+$container-breakpoint-md: useBreakpointOrFallback('md', 768px);
 .track-info {
   display: flex;
   gap: 12px;
@@ -156,17 +83,6 @@ $container-breakpoint-md: useBreakpointOrFallback("md", 768px);
     line-height: normal;
     * {
       line-height: normal;
-    }
-    .track-info-livestream {
-      height: 16px;
-      line-height: 16px;
-      display: flex;
-      margin-bottom: 4px;
-      .track-info-livestream-station {
-        font-family: var(--font-family);
-        font-size: 10px;
-        font-weight: 400;
-      }
     }
     .track-info-title {
       width: 100%;
@@ -228,10 +144,9 @@ $container-breakpoint-md: useBreakpointOrFallback("md", 768px);
               display: flex;
               flex-shrink: 0;
               align-items: center;
-              animation: slide-left v-bind(getMarqueeSpeed) linear v-bind(marqueeLoops);
+              animation: slide-left v-bind(getMarqueeSpeed) linear
+                v-bind(marqueeLoops);
               animation-delay: v-bind(marqueeDelay);
-              .content {
-              }
               @keyframes slide-left {
                 from {
                   -webkit-transform: translateX(0);
@@ -247,23 +162,6 @@ $container-breakpoint-md: useBreakpointOrFallback("md", 768px);
         }
       }
     }
-    .track-info-time {
-      display: flex;
-      gap: 0.25rem;
-      font-size: var(--persistent-player-time-size);
-      color: var(--persistent-player-time-color);
-      font-weight: var(--persistent-player-time-weight);
-      &.hideTimeOnMobile {
-        @container (max-width: #{$container-breakpoint-md}) {
-          display: none;
-        }
-      }
-    }
   }
-}
-</style>
-
-<style lang="scss">
-.track-info-details {
 }
 </style>

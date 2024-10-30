@@ -68,11 +68,11 @@ const closeAll = () => {
           <p class="mb-3 text-xs">
             By proceeding to create your account, you are agreeing to Somnia
             Sounds'
-            <nuxt-link to="https://somniasounds.com/terms">
+            <nuxt-link @click="closeAll" to="/terms">
               Terms of Service
             </nuxt-link>
             and
-            <nuxt-link to="https://somniasounds.com/privacy">
+            <nuxt-link @click="closeAll" to="/privacy">
               Privacy Policy
             </nuxt-link>
           </p>

@@ -22,7 +22,7 @@ const emit = defineEmits(['close-sidebar'])
           :aria-label="`${$props.pabel} sidebar close button`"
           @click="emit('close-sidebar')"
         />
-        <h1>{{ props.label }}</h1>
+        <h2>{{ props.label }}</h2>
       </div>
       <slot></slot>
     </div>
@@ -34,8 +34,8 @@ const emit = defineEmits(['close-sidebar'])
   .p-button {
     background-color: transparent;
   }
-  h1 {
-    padding-top: 6px;
+  h2 {
+    padding-top: 3px;
   }
 }
 </style>
