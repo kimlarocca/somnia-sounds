@@ -1,41 +1,41 @@
 <script setup>
-import { ref, onUpdated } from "vue"
-import Slider from "primevue/slider"
+import { ref, onUpdated } from 'vue'
+import Slider from 'primevue/slider'
 const props = defineProps({
   /**
    * autoplay on load
    */
   minimized: {
     default: false,
-    type: Boolean,
+    type: Boolean
   },
   /**
    * get if the audio is a live stream or on demand
    */
   isLiveStream: {
     default: false,
-    type: Boolean,
+    type: Boolean
   },
   /**
    * get if the audio duration
    */
   currentEpisodeDuration: {
     default: 0,
-    type: Number,
+    type: Number
   },
   /**
    * get if the audio duration progress
    */
   currentEpisodeProgress: {
     default: 0,
-    type: Number,
-  },
+    type: Number
+  }
 })
 
 const emit = defineEmits([
-  "scrub-timeline-change",
-  "scrub-timeline-end",
-  "scrub-timeline-click",
+  'scrub-timeline-change',
+  'scrub-timeline-end',
+  'scrub-timeline-click'
 ])
 
 const currentEpisodeDuration = computed(() => props.currentEpisodeDuration)
@@ -54,29 +54,29 @@ onUpdated(() => {
 })
 
 // format time in minutes and seconds
-const formatTime = (seconds) => {
+const formatTime = seconds => {
   const minutes = Math.floor(seconds / 60)
   const remainingSeconds = Math.floor(seconds % 60)
-  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
 }
 
 // handles dragging on the timeline
-const handleDragging = (value) => {
-  emit("scrub-timeline-change", value)
+const handleDragging = value => {
+  emit('scrub-timeline-change', value)
   isDragging.value = true
   jumpToValue.value = value
   progress.value = value
 }
 // handles drag end on the timeline
-const handleDragEnd = (data) => {
-  emit("scrub-timeline-end", data.value)
+const handleDragEnd = data => {
+  emit('scrub-timeline-end', data.value)
   isDragging.value = false
   progress.value = data.value
 }
 // handles click on the timeline
 const handleClick = () => {
   // uses the jumpToValue.value from the change event in the handleDragging function
-  emit("scrub-timeline-click", jumpToValue.value)
+  emit('scrub-timeline-click', jumpToValue.value)
   handleDragEnd({ value: jumpToValue.value })
 }
 </script>
@@ -109,14 +109,14 @@ const handleClick = () => {
   position: relative;
   width: 100%;
   height: 6px !important;
-  background: var(--persistent-player-slider-buffer);
+  background: var(--gray-500);
   .p-slider-range {
-    background: var(--persistent-player-slider-progress);
+    background: var(--text-color);
     border-radius: 6px;
   }
   .p-slider-handle {
-    border: 1px solid var(--persistent-player-slider-thumb-border);
-    background-color: var(--persistent-player-slider-thumb-bg);
+    border: 1px solid var(--purple);
+    background-color: var(--purple);
   }
   &.minimized {
     position: absolute;

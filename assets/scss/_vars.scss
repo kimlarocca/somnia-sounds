@@ -967,5 +967,6 @@ $persistentPlayerButtonBgColor: #{map-get($colors, 'white')};
 $persistentPlayerButtonRadius: 50%;
 $persistentPlayerButtonHeight: 28px;
 $persistentPlayerButtonWidth: 28px;
+$persistentPlayerSliderBuffer: #{map-get($colors, 'white')};
 $toolsBreakPoint: 472px;
 $padding: 1.5rem;

@@ -718,6 +718,7 @@ defineExpose({
               <div
                 class="mt-2 flex justify-content-center align-items-center gap-2"
               >
+                <!--
                 <Transition name="skipBtnL">
                   <Button
                     v-if="!isLiveStream"
@@ -728,6 +729,7 @@ defineExpose({
                     <slot name="skipBack"><i class="pi pi-undo"></i></slot>
                   </Button>
                 </Transition>
+                -->
                 <Button
                   ref="playButtonRef"
                   :disabled="isStreamLoading"
@@ -746,6 +748,7 @@ defineExpose({
                   ></slot>
                   <slot v-else name="pause"><i class="pi pi-pause"></i></slot>
                 </Button>
+                <!--
                 <Transition name="skipBtnR">
                   <Button
                     v-if="!isLiveStream"
@@ -756,6 +759,7 @@ defineExpose({
                     <slot name="skipAhead"><i class="pi pi-refresh"></i></slot>
                   </Button>
                 </Transition>
+                -->
               </div>
             </div>
           </div>
@@ -1037,12 +1041,23 @@ $container-breakpoint-md: useBreakpointOrFallback('md', 768px);
       fill: var(--persistent-player-button-color);
     }
     &.media-button-expanded-play {
-      width: calc(var(--persistent-player-button-width) * 1.3);
-      height: calc(var(--persistent-player-button-height) * 1.3);
+      width: calc(var(--persistent-player-button-width) * 2);
+      height: calc(var(--persistent-player-button-height) * 2);
+      background: var(--white);
+      svg {
+        width: 20px !important;
+        height: 20px !important;
+        path {
+          fill: var(--purple) !important;
+        }
+      }
     }
     .o-icon {
       width: 20px;
       height: 20px;
+      path {
+        fill: var(--white);
+      }
     }
     &.play-button {
       .play-icon {
