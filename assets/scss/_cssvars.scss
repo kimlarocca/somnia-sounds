@@ -138,6 +138,12 @@
     --focus-ring: #{$focusShadow};
 
     --bottom-menu-height: #{$bottomMenuHeight};
+    --persistent-player-z-index: #{$persistentPlayerZIndex};
+    --persistent-player-button-color: #{$persistentPlayerButtonColor};
+    --persistent-player-button-bg-color: #{$persistentPlayerButtonBgColor};
+    --persistent-player-button-radius: #{$persistentPlayerButtonRadius};
+    --persistent-player-button-height: #{$persistentPlayerButtonHeight};
+    --persistent-player-button-width: #{$persistentPlayerButtonWidth};
 }
 [data-style-mode='dark'],
 .style-mode-dark {

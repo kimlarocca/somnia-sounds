@@ -6,7 +6,7 @@ $page-gutter-padding: 32px;
 
 $colors: (
     'background': #1b223c,
-    'background2': rgba(255, 255, 255, 0.1),
+    'background2': #1b223c,
     'background3': #ffffff1a,
     'background4': #13182a,
     'dark-blue': #060027,
@@ -33,7 +33,7 @@ $colors: (
 
 $colors-dark-mode: (
     'background': #1b223c,
-    'background2': rgba(255, 255, 255, 0.1),
+    'background2': #1b223c,
     'background3': #ffffff1a,
     'background4': #13182a,
     'dark-blue': #060027,
@@ -961,5 +961,11 @@ $headerHeight: 60px;
 $headerBackground: #{map-get($colors, 'black')};
 $bottomMenuHeight: 60px;
 $playerHeight: 60px;
+$persistentPlayerZIndex: 1000;
+$persistentPlayerButtonColor: #{map-get($colors, 'purple')};
+$persistentPlayerButtonBgColor: #{map-get($colors, 'white')};
+$persistentPlayerButtonRadius: 50%;
+$persistentPlayerButtonHeight: 28px;
+$persistentPlayerButtonWidth: 28px;
 $toolsBreakPoint: 472px;
 $padding: 1.5rem;

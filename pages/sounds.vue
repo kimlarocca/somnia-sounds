@@ -51,7 +51,7 @@ const togglePlayHere = item => {
 
     <section>
       <h1 class="mb-5">infinite soundscapes</h1>
-      <p>{{ currentEpisode }}</p>
+      <p class="mb-5">current episode: {{ currentEpisode }}</p>
       <Card v-for="item in items" :key="item.id" :item="item">
         <template #play>
           <PlayButton

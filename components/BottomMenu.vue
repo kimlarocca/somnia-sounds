@@ -8,7 +8,7 @@ const route = useRoute()
 const options = ref([
   { icon: markRaw(HomeIcon), value: 'Home', slug: '/home' },
   { icon: markRaw(MoonIcon), value: 'Sleep', slug: '/sleep' },
-  { icon: markRaw(SoundsIcon), value: 'Sounds', slug: '/sounds' },
+  { icon: markRaw(SoundsIcon), value: 'Explore', slug: '/sounds' },
   { icon: markRaw(StarIcon), value: 'Saved', slug: '/saved' }
 ])
 </script>

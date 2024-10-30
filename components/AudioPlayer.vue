@@ -14,31 +14,21 @@ import {
   useIsPlayerMinimized,
   audioPlayerHeight,
   useIsStreamLoading,
-  useIsLiveStream,
   useIsPlayerExpanded,
   useCurrentEpisodeDuration,
   useCurrentEpisodeProgress,
   useSkipAheadTrigger,
   useSkipBackTrigger,
   useIsNetworkConnected,
-  useDeviceId,
-  useCurrentUserProfile,
   useGlobalToast
 } from '~/composables/states'
-import {
-  templatizePublisherImageUrl,
-  getDate,
-  hasQueryParams,
-  getEpisodeFallBackImage
-} from '~/utilities/helpers'
-
+import { getDate } from '~/utilities/helpers'
 import { initMediaSession } from '~/utilities/media-session.js'
 
 const devicePlatform = Capacitor.getPlatform()
 
 const currentEpisode = useCurrentEpisode()
 const isEpisodePlaying = useIsEpisodePlaying()
-const isLiveStream = useIsLiveStream()
 const isNewEpisode = ref(false)
 const isPlayerExpanded = useIsPlayerExpanded()
 const togglePlayTrigger = useTogglePlayTrigger()
@@ -49,8 +39,6 @@ const skipBackTrigger = useSkipBackTrigger()
 const currentEpisodeDuration = useCurrentEpisodeDuration()
 const currentEpisodeProgress = useCurrentEpisodeProgress()
 const isNetworkConnected = useIsNetworkConnected()
-const deviceId = useDeviceId()
-const currentUser = useCurrentUserProfile()
 const globalToast = useGlobalToast()
 
 const showPlayer = ref(false)
@@ -71,11 +59,6 @@ const getDescription = computed(() => {
   }
 })
 
-const getMediaType = computed(() => {
-  // if the hls value is set, then it is a live stream
-  return currentEpisode?.value?.hls ? 'live' : 'on_demand'
-})
-
 const getTitle = computed(() => {
   return currentEpisode?.value?.title
 })
@@ -85,35 +68,6 @@ const updateUseIsPlayerMinimized = e => {
   isPlayerMinimized.value = e
 }
 
-/*
-the url that comes down from publisher is in currentEpisode.value
-then if we are in the App env, we check if the url has a param(a "?" already)
-then we grab the asID and the restriction value (0 default or 1)
-then we add the user id to the url (0 if not logged in)
-then we detect the device and add it to the url
-then we merge it all together and return it to the player as the source for the request
-*/
-
-const getConfiguredAudioUrl = computed(() => {
-  const desktop = devicePlatform === 'web'
-  // if it is not the desktop, then we use the hls value, else we use the file value
-  const url = !desktop
-    ? currentEpisode.value?.hls ||
-      currentEpisode.value?.file ||
-      currentEpisode.value?.audio ||
-      ''
-    : currentEpisode.value?.file || currentEpisode.value?.audio || ''
-  const hasQuery = hasQueryParams(url)
-  const adID = deviceId.value?.identifier ?? '0'
-  const userID = currentUser?.value?.id ?? '0'
-  const thisDevice = devicePlatform
-  // update restriction when we have the value from setting panel
-  const restriction = '0'
-  return `${url}${
-    hasQuery ? '&' : '?'
-  }listenerid=${adID}&aw_0_1st.lmt=${restriction}&aw_0_1st.userid=${userID}&device=${thisDevice}`
-})
-
 // function that handles the logic for the persistent player to show and hide when the user changes the episode
 const switchEpisode = async val => {
   isNewEpisode.value = true
@@ -121,15 +75,14 @@ const switchEpisode = async val => {
   await RemoteStreamer.stop()
   currentEpisode.value = val
   isStreamLoading.value = true
-  //isLiveStream.value = val.hls ? true : false
   await nextTick()
   await RemoteStreamer.play({
-    url: getConfiguredAudioUrl.value,
+    url: currentEpisode.value.audio,
     enableCommandCenter: true,
-    enableCommandCenterSeek: !isLiveStream.value
+    enableCommandCenterSeek: false
   })
 
-  // initiallizes the media session in ~/utilities/media-session.js
+  // init the media session in ~/utilities/media-session.js
   initMediaSession(currentEpisode.value)
   setTimeout(() => {
     showPlayer.value = true
@@ -137,18 +90,17 @@ const switchEpisode = async val => {
   }, delay)
 }
 
-// function that handles the skip to time with the plugin
 const handleSkipTo = e => {
   RemoteStreamer.seekTo({ position: e })
 }
-//
+
 const handleSeekTo = e => {
   // convert the percentage to the time
   const time = (e / 100) * currentEpisodeDuration.value
   RemoteStreamer.seekTo({ position: time })
 }
 
-// handle the toggle play button and tracking
+// handle the toggle play button
 const togglePlayHere = async e => {
   if (e && !isEpisodePlaying.value) {
     await RemoteStreamer.resume()
@@ -162,21 +114,13 @@ const togglePlayHere = async e => {
   isNewEpisode.value = false
 }
 
-//const handleCast = () => {
-//console.log("playerRef.value = ", playerRef.value)
-//console.log("remoteControl = ", remoteControl)
-//playerRef.value.$mediaPlayerRef.requestGoogleCast()
-//playerRef.value.castToGoogleCast()
-//remoteControl.requestGoogleCast()
-//}
-
 // function that handles the expanded player from the persistent player emit
 const handleIsExpanded = e => {
   isPlayerExpanded.value = e
 }
 
 // function that handles the error event from the persistent player emit
-//I have to check for "e" it fires 2 times... once with the error and once without
+// I have to check for "e" it fires 2 times... once with the error and once without
 const handleError = e => {
   if (e) {
     globalToast.value = {
@@ -219,23 +163,14 @@ watch(isNetworkConnected, () => {
     setTimeout(() => {
       currentEpisode.value = tempEpisode
     }, 500)
-    if (!isLiveStream.value) {
-      setTimeout(() => {
-        RemoteStreamer.seekTo({ position: tempTime })
-      }, 1500)
-    }
   }
 })
 
-//
-// watch(isBuffering, (e) => {
-//   console.log("watch: isBuffering = ", isBuffering.value, e)
-// })
-
-// function that handles the skip ahead toggle triiger
+// function that handles the skip ahead toggle trigger
 const handleSkipAhead = () => {
   skipAheadTrigger.value = !skipAheadTrigger.value
 }
+
 // function that handles the skip back toggle trigger
 const handleSkipBack = () => {
   skipBackTrigger.value = !skipBackTrigger.value
@@ -254,6 +189,7 @@ watch(togglePlayTrigger, () => {
 watch(skipAheadTrigger, () => {
   handleSkipTo(currentEpisodeProgress.value + PLAYER_SKIP_TIME)
 })
+
 watch(skipBackTrigger, () => {
   handleSkipTo(currentEpisodeProgress.value - PLAYER_SKIP_TIME)
 })
@@ -294,7 +230,6 @@ onMounted(async () => {
     } else {
       isStreamLoading.value = false
     }
-    //isStreamLoading.value = e.isBuffering
   })
 
   await RemoteStreamer.addListener('stop', e => {
@@ -320,7 +255,7 @@ onMounted(async () => {
 <template>
   <div v-if="currentEpisode">
     <transition name="player">
-      <v-new-persistent-player
+      <player-v-new-persistent-player
         v-show="showPlayer"
         ref="playerRef"
         data-style-mode="dark"
@@ -341,7 +276,6 @@ onMounted(async () => {
         can-click-anywhere
         :isStreamLoading
         :isEpisodePlaying
-        :isLiveStream
         :currentEpisodeDuration
         :currentEpisodeProgress
       >
@@ -372,7 +306,7 @@ onMounted(async () => {
           <!-- <Button label="Cast" @click="handleCast" /> -->
           <AudioPlayerExpanded @close-panel="playerRef.toggleExpanded()" />
         </template>
-      </v-new-persistent-player>
+      </player-v-new-persistent-player>
     </transition>
   </div>
 
@@ -449,6 +383,7 @@ html.style-mode-dark .persistent-player {
   .persistent-player {
     &.expanded {
       bottom: 0;
+      background-color: var(--background2);
     }
 
     .expanded-view {

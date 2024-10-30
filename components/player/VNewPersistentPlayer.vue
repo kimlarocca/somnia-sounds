@@ -563,25 +563,13 @@ defineExpose({
     <Transition name="expand">
       <div v-show="!isExpanded">
         <div class="flex h-full align-items-center">
-          <div
-            v-if="props.image"
+          <img
+            :alt="title"
+            v-if="image"
+            :src="image"
             class="track-info-image flex-none"
             :class="[{ hideImageOnMobile: props.hideImageOnMobile }]"
-          >
-            <div
-              :class="[{ 'cursor-pointer': props.canClickAnywhere }]"
-              @click="handleClickAnywhere"
-            >
-              <VFlexibleLink
-                class="track-info-image-link"
-                :to="props.titleLink ?? null"
-                raw
-                :title="props.titleLink ?? null"
-                @flexible-link-click="emit('image-click')"
-              >
-              </VFlexibleLink>
-            </div>
-          </div>
+          />
 
           <div
             class="flex h-full w-full align-items-center gap-2 px-2 relative"
@@ -791,7 +779,7 @@ $container-breakpoint-md: useBreakpointOrFallback('md', 768px);
   z-index: var(--persistent-player-z-index);
   width: 100%;
   color: var(--text-color);
-  background-color: var(--persistent-player-bg);
+  background-color: var(--purple);
   transition: bottom 0.25s, height calc(var(--transition-duration) * 2);
   -webkit-transition: bottom 0.25s, height calc(var(--transition-duration) * 2);
   display: flex;
@@ -1058,10 +1046,10 @@ $container-breakpoint-md: useBreakpointOrFallback('md', 768px);
     }
     &.play-button {
       .play-icon {
-        width: 17px;
-        height: 17px;
+        width: 13px;
+        height: 13px;
         margin-top: 1px;
-        margin-left: 3px;
+        margin-right: -3px;
       }
       .pause-icon {
         width: 11px;
