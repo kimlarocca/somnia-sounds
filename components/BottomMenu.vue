@@ -1,35 +1,16 @@
 <script setup>
-import { useBottomMenuState } from '~/composables/states'
 import HomeIcon from './icons/HomeIcon.vue'
 import MoonIcon from './icons/MoonIcon.vue'
 import SoundsIcon from './icons/SoundsIcon.vue'
 import StarIcon from './icons/StarIcon.vue'
 
 const route = useRoute()
-const bottomMenuState = useBottomMenuState()
 const options = ref([
   { icon: markRaw(HomeIcon), value: 'Home', slug: '/home' },
   { icon: markRaw(MoonIcon), value: 'Sleep', slug: '/sleep' },
   { icon: markRaw(SoundsIcon), value: 'Sounds', slug: '/sounds' },
   { icon: markRaw(StarIcon), value: 'Saved', slug: '/saved' }
 ])
-
-// if another trigger changes the route, update the bottom menu state
-watch(
-  () => route.path,
-  e => {
-    bottomMenuState.value = { value: null }
-    options.value.forEach(item => {
-      if (e.includes(item.value)) bottomMenuState.value = { value: item.value }
-    })
-  },
-  { immediate: true }
-)
-
-// handle bottom menu click to set active
-const menuClick = item => {
-  bottomMenuState.value = { value: item.value }
-}
 </script>
 
 <template>
@@ -37,15 +18,11 @@ const menuClick = item => {
     <div class="buttons-holder">
       <template v-for="item in options" :key="item.slug">
         <nuxt-link :to="item.slug" class="link w-full" prefetch>
-          <Button
-            @click="menuClick(item)"
-            class="w-full"
-            :aria-label="`${item.value} menu button`"
-          >
+          <Button class="w-full" :aria-label="`${item.value} menu button`">
             <div class="item">
               <component
                 :is="item.icon"
-                :active="bottomMenuState.value == item.value"
+                :active="route.name === item.value.toLowerCase()"
               >
               </component>
               {{ item.value }}
@@ -112,11 +89,6 @@ const menuClick = item => {
           font-weight: var(--font-weight-300);
           font-family: var(--font-family-header);
           text-decoration: none;
-        }
-      }
-      &.router-link-active {
-        .p-button {
-          opacity: 1;
         }
       }
     }

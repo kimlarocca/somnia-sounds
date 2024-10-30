@@ -47,9 +47,7 @@ export const FALLBACKUSER = '344344'
 export const FALLBACKUSERDARK = '344343'
 
 //Global vars for the browser top color
-export const useBrowserTopColor = () => useState('browserTopColor', () => '#ffffff')
-//Global vars for the browser top color or Darkmode
-export const useBrowserTopColorDarkMode = () => useState('browserTopColorDarkMode', () => '#1f2741')
+export const useBrowserTopColor = () => useState('browserTopColor', () => '#1f2741')
 
 //player skip time
 export const PLAYER_SKIP_TIME = 10

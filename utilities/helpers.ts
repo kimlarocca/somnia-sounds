@@ -2,7 +2,6 @@ import { format, formatDistanceToNowStrict } from "date-fns"
 import { StatusBar, Style } from "@capacitor/status-bar"
 import {
   useCurrentEpisode,
-  useDeviceId,
   useTextSizeOption,
   useIsApp,
   useCurrentUser,
@@ -12,10 +11,8 @@ import {
   useTogglePlayTrigger,
   useGlobalToast,
   useAccountPromptSideBar,
-  useIsDarkMode,
   useIsNetworkConnected,
   useIsLiveStream,
-  useSettingSideBar,
 } from "~/composables/states"
 import { Capacitor } from "@capacitor/core"
 import { Preferences } from "@capacitor/preferences"
@@ -341,44 +338,17 @@ export function setFontSize(size: string) {
   document.documentElement.style.fontSize = size
 }
 
-/**
- * helper function to toggle darkmode of the status bar
- */
-export async function setStatusDarkMode(bool: boolean) {
-  if (useIsApp().value) {
-    bool
-      ? await StatusBar.setStyle({ style: Style.Dark })
-      : await StatusBar.setStyle({ style: Style.Light })
-  }
-}
-/**
- * helper function to toggle darkmode
- */
-export async function setDarkMode(bool: boolean) {
-  bool
-    ? document.documentElement.classList.add("style-mode-dark")
-    : document.documentElement.classList.remove("style-mode-dark")
-  await setStatusDarkMode(bool)
-  const isDarkMode = useIsDarkMode()
-  isDarkMode.value = bool
-}
-
-// function to get the EPISODE fallback image for the episode depending on darkmode
+// function to get the EPISODE fallback image for the episode
 export const getEpisodeFallBackImage = () => {
-  const isDarkMode = useIsDarkMode()
-  return isDarkMode.value ? FALLBACKIMAGEEPDARK : FALLBACKIMAGEEP
-}
+  return FALLBACKIMAGEEPDARK}
 
-// function to get the EPISODE HEADER fallback image for the episode depending on darkmode
+// function to get the EPISODE HEADER fallback image for the episode
 export const getEpisodeHeadFallBackImage = () => {
-  const isDarkMode = useIsDarkMode()
-  return isDarkMode.value ? FALLBACKIMAGEEPHEADDARK : FALLBACKIMAGEEPHEAD
-}
+  return FALLBACKIMAGEEPHEADDARK}
 
 // function to get the USER icon fall back image
 export const getUserFallBackImage = () => {
-  const isDarkMode = useIsDarkMode()
-  return isDarkMode.value ? FALLBACKUSERDARK : FALLBACKUSER
+  return FALLBACKUSERDARK
 
 }
 
@@ -392,17 +362,9 @@ export const getTextSizePixel = (label) => {
   }
 }
 
-// detect system theme preference
-export const detectSystemDarkMode = () => {
-  return Boolean(
-    window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
-  )
-}
-
 // set the display settings in one place
 export const setDisplaySettings = async (data) => {
   setFontSize(getTextSizePixel(data.text_size))
-  await setDarkMode(data.dark_mode)
 }
 
 // generate a random number between min and max
@@ -656,9 +618,6 @@ export const getAndSetUserProfile = async () => {
           // no, set defaults from localUserProfileDefault state
           const defaults = localUserProfileDefault.value
 
-          //get the system's current theme and apply it to the initial defaults
-          defaults.dark_mode = detectSystemDarkMode()
-
           // get the system's notification permission and apply it to the initial defaults
           if (isApp.value) {
             await PushNotifications.checkPermissions().then((result) => {
@@ -812,9 +771,10 @@ export const saveFavorite = async (
   }
 }
 
+// KIM TO DO
 // handle saving the last played to the history of the user. data is saved in supabase table called recently_viewed
-export const saveRecentlyPlayed = (media: object, typeArg = media.type) => {
-  saveFavorite(media, typeArg, "recently_viewed")
+export const saveRecentlyPlayed = (media: object) => {
+  // saveFavorite(media, "recently_viewed")
 }
 
 // normalize the bucket item data for the player

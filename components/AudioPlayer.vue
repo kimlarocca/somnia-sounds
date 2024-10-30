@@ -65,12 +65,7 @@ const isError = ref(null)
 
 const getDescription = computed(() => {
   if (!isStreamLoading.value) {
-    if (isLiveStream.value) {
-      return currentEpisode?.value?.episodeTitle
-    } else {
-      return currentEpisode?.value?.showTitle
-      //currentEpisode?.onTodaysShowHeadline ?? currentEpisode?.details
-    }
+    return currentEpisode?.value?.tease
   } else {
     return '...'
   }
@@ -325,7 +320,7 @@ onMounted(async () => {
 <template>
   <div v-if="currentEpisode">
     <transition name="player">
-      <player-v-new-persistent-player
+      <v-new-persistent-player
         v-show="showPlayer"
         ref="playerRef"
         data-style-mode="dark"
@@ -333,12 +328,8 @@ onMounted(async () => {
         :can-expand-with-swipe="true"
         :can-unexpand-with-swipe="true"
         :title="getTitle"
-        :station="currentEpisode?.name"
         :description="getDescription"
-        :image="
-          templatizePublisherImageUrl(currentEpisode?.image) ??
-          getEpisodeFallBackImage()
-        "
+        :image="currentEpisode?.image"
         :platform="devicePlatform"
         @togglePlay="togglePlayHere"
         @is-minimized="updateUseIsPlayerMinimized"
@@ -357,11 +348,7 @@ onMounted(async () => {
         <template #expanded-player-title>
           <PipeData class="text-xs">
             <template #left>
-              {{
-                currentEpisode.showTitle ||
-                currentEpisode.station ||
-                currentEpisode.headers.brand.title
-              }}
+              {{ currentEpisode.title }}
             </template>
             <template #right>
               {{ getDate(currentEpisode) }}
@@ -385,7 +372,7 @@ onMounted(async () => {
           <!-- <Button label="Cast" @click="handleCast" /> -->
           <AudioPlayerExpanded @close-panel="playerRef.toggleExpanded()" />
         </template>
-      </player-v-new-persistent-player>
+      </v-new-persistent-player>
     </transition>
   </div>
 
@@ -436,9 +423,9 @@ html.style-mode-dark .persistent-player {
       margin-right: 6px;
     }
     .track-info-image {
-      width: 60px;
-      max-width: 60px;
-      height: 60px;
+      width: var(--persistent-player-height);
+      max-width: var(--persistent-player-height);
+      height: var(--persistent-player-height);
     }
     .track-info .track-info-details .track-info-title .title div {
       font-family: var(--font-family-header);

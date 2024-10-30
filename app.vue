@@ -20,10 +20,7 @@ import {
   useIsNetworkConnected,
   useCurrentEpisode
 } from '~/composables/states'
-import {
-  useBrowserTopColor,
-  useBrowserTopColorDarkMode
-} from '~/composables/globals'
+import { useBrowserTopColor } from '~/composables/globals'
 import { initLocalNotifications } from '~/utilities/local-notifications'
 import { Network } from '@capacitor/network'
 // import { updateAllLiveStreams } from "~/composables/data/liveStream"
@@ -43,7 +40,6 @@ const config = useRuntimeConfig()
 const currentUserProfile = useCurrentUserProfile()
 const currentEpisode = useCurrentEpisode()
 const browserTopColor = useBrowserTopColor()
-const browserTopColorDarkMode = useBrowserTopColorDarkMode()
 const globalToast = useGlobalToast()
 const isNetworkConnected = useIsNetworkConnected()
 const isApp = useIsApp()
@@ -281,22 +277,8 @@ watch(globalError, error => {
         name="twitter:image"
         content="https://media.wnyc.org/i/1200/1200/c/80/1/wnyc_square_logo.png"
       />
-      <Meta
-        name="theme-color"
-        :content="
-          currentUserProfile?.dark_mode
-            ? browserTopColorDarkMode
-            : browserTopColor
-        "
-      />
-      <Meta
-        name="msapplication-TileColor"
-        :content="
-          currentUserProfile?.dark_mode
-            ? browserTopColorDarkMode
-            : browserTopColor
-        "
-      />
+      <Meta name="theme-color" :content="browserTopColor" />
+      <Meta name="msapplication-TileColor" :content="browserTopColor" />
     </Head>
   </Html>
   <NuxtLayout>

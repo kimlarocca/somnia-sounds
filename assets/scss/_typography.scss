@@ -19,8 +19,8 @@ $type-header2: (
     'default': (
         'values': (
             'font-family': var(--font-family-header),
-            'font-size': var(--font-size-13),
-            'line-height': var(--font-size-13),
+            'font-size': var(--font-size-12),
+            'line-height': var(--font-size-12),
             'font-weight': var(--font-weight-200),
             'letter-spacing': 1px,
             'color': var(--text-color),
@@ -31,8 +31,8 @@ $type-header3: (
     'default': (
         'values': (
             'font-family': var(--font-family-header),
-            'font-size': var(--font-size-12),
-            'line-height': var(--font-size-12),
+            'font-size': var(--font-size-10),
+            'line-height': var(--font-size-10),
             'font-weight': var(--font-weight-200),
             'letter-spacing': 1px,
             'color': var(--text-color),
@@ -43,33 +43,13 @@ $type-header4: (
     'default': (
         'values': (
             'font-family': var(--font-family-header),
-            'font-size': var(--font-size-10),
-            'line-height': var(--font-size-10),
+            'font-size': var(--font-size-8),
+            'line-height': var(--font-size-8),
             'font-weight': var(--font-weight-200),
             'letter-spacing': 1px,
             'color': var(--text-color),
         ),
     )
-);
-
-$type-title: (
-    'default': (
-        'values': (
-            'font-family': var(--font-family-header),
-            'font-size': var(--font-size-5),
-            'line-height': var(--font-size-7),
-            'font-weight': var(--font-weight-200),
-            'color': var(--text-color),
-            'letter-spacing': 0.05em,
-            'text-transform': uppercase,
-        ),
-    ),
-    $medium: (
-        'values': (
-            'font-size': var(--font-size-3),
-            'line-height': var(--font-size-4),
-        ),
-    ),
 );
 
 $type-paragraph: (
@@ -80,33 +60,13 @@ $type-paragraph: (
             'line-height': var(--font-size-8),
             'font-weight': var(--font-weight),
             'color': var(--text-color),
-            'letter-spacing': 1px,
+            'letter-spacing': 0,
         ),
     ),
     $medium: (
         'values': (
             'font-size': var(--font-size-5),
             'line-height': var(--font-size-8),
-        ),
-    ),
-);
-
-$type-label: (
-    'default': (
-        'values': (
-            'font-family': var(--font-family-header),
-            'font-size': var(--font-size-10),
-            'line-height': var(--font-size-10),
-            'font-weight': var(--font-weight),
-            'color': var(--text-color),
-            'letter-spacing': 0,
-            'text-transform': uppercase,
-        ),
-    ),
-    $medium: (
-        'values': (
-            'font-size': var(--font-size-5),
-            'line-height': var(--font-size-5),
         ),
     ),
 );
@@ -147,21 +107,12 @@ h4,
     font-optical-sizing: auto;
 }
 
-.type-title {
-    @include font-config($type-title);
-    font-optical-sizing: auto;
-}
-
 p,
 .p1,
 .type-paragraph {
     padding: 0;
     margin: 0;
     @include font-config($type-paragraph);
-}
-
-.type-label {
-    @include font-config($type-label);
 }
 
 ul,

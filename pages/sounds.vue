@@ -1,4 +1,10 @@
 <script setup>
+import { useCurrentEpisode, useTogglePlayTrigger } from '~/composables/states'
+import { saveRecentlyPlayed, prepForPlayer } from '~/utilities/helpers'
+
+const currentEpisode = useCurrentEpisode()
+const togglePlayTrigger = useTogglePlayTrigger()
+
 definePageMeta({
   layout: 'default',
   layoutTransition: {
@@ -18,13 +24,18 @@ const items = ref([
     estimatedDuration: 30,
     title: 'Fur Elise',
     tease: 'Fall asleep with this soothing piano music by Beethoven.',
-    image: 'https://placehold.co/248x124',
+    image: 'https://placehold.co/248',
     audio: 'https://www.kimlarocca.com/fur-elise.mp3'
   }
 ])
 
+// handle the play button click
 const togglePlayHere = item => {
-  console.log('play', item)
+  if (currentEpisode.value?.id !== item.id) {
+    currentEpisode.value = prepForPlayer(item)
+    saveRecentlyPlayed(item)
+  }
+  togglePlayTrigger.value = !togglePlayTrigger.value
 }
 </script>
 
@@ -39,8 +50,9 @@ const togglePlayHere = item => {
     </Html>
 
     <section>
-      <h1 class="mb-4">infinite soundscapes</h1>
-      <CardLarge v-for="item in items" :key="item.id" :item="item">
+      <h1 class="mb-5">infinite soundscapes</h1>
+      <p>{{ currentEpisode }}</p>
+      <Card v-for="item in items" :key="item.id" :item="item">
         <template #play>
           <PlayButton
             v-if="item.audio"
@@ -52,7 +64,7 @@ const togglePlayHere = item => {
         <template #favorite>
           <StarIcon class="favorite" />
         </template>
-      </CardLarge>
+      </Card>
     </section>
   </div>
 </template>

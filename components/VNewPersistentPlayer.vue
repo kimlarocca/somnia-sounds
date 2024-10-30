@@ -11,13 +11,8 @@ import 'vidstack/player/ui'
 //import type { MediaPlayerElement } from "vidstack/elements"
 
 import soundAnimGif from '../assets/images/audioAnim.gif'
-import GoogleCastIcon from '../assets/icons/GoogleCastIcon'
-import VFlexibleLink from './VFlexibleLink.vue'
-import VNewTrackInfo from './VNewTrackInfo.vue'
 import { useSwipe } from '@vueuse/core'
-import Button from 'primevue/button'
 //import { MediaPlayerElement, defineCustomElement } from "vidstack/elements"
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import type { MediaPlayerElement } from 'vidstack/elements'
 
@@ -239,13 +234,6 @@ const props = defineProps({
   skipBackTime: {
     default: 15,
     type: Number
-  },
-  /**
-   * radio station name
-   */
-  station: {
-    default: null,
-    type: String
   },
   streamType: {
     default: 'unknown',
@@ -785,30 +773,13 @@ defineExpose({
           <media-provider :controls="false" playsinline></media-provider>
 
           <media-controls data-visible>
-            <div
-              v-if="!isExpanded"
-              class="flex w-full"
-              :style="`height:${props.imageSize}px`"
-            >
-              <div
+            <div v-if="!isExpanded" class="flex w-full">
+              <img
                 v-if="props.image"
+                :src="props.image"
                 class="track-info-image flex-none"
                 :class="[{ hideImageOnMobile: props.hideImageOnMobile }]"
-              >
-                <div
-                  :class="[{ 'cursor-pointer': props.canClickAnywhere }]"
-                  @click="handleClickAnywhere"
-                >
-                  <VFlexibleLink
-                    class="track-info-image-link"
-                    :to="props.titleLink ?? null"
-                    raw
-                    :title="props.titleLink ?? null"
-                    @flexible-link-click="emit('image-click')"
-                  >
-                  </VFlexibleLink>
-                </div>
-              </div>
+              />
               <div class="w-full">
                 <media-controls-group>
                   <div class="flex flex-column h-full justify-content-between">
@@ -1024,7 +995,7 @@ defineExpose({
                   class="cast-btn header-cast-btn"
                   @click="handleCast"
                 >
-                  <GoogleCastIcon />
+                  <IconsGoogleCastIcon />
                 </Button>
               </div>
             </slot>
@@ -1033,21 +1004,7 @@ defineExpose({
             <slot name="header-content"></slot>
 
             <div class="flex flex-column gap-3">
-              <!--   <pre class="text-xs">{{ currentEpisode }}</pre> -->
-
-              <div v-if="isLive" class="flex flex-column gap-2">
-                <div class="live flex gap-2 align-items-center">
-                  <media-live-button data-edge class="media-live-button">
-                    <span class="media-live-button-text">LIVE</span>
-                  </media-live-button>
-                  <div class="text-sm">{{ props.station }}</div>
-                </div>
-                <slot name="expanded-player-title">{{ props.title }}</slot>
-              </div>
-
-              <div v-else>
-                <slot name="expanded-player-title">{{ props.title }}</slot>
-              </div>
+              <slot name="expanded-player-title">{{ props.title }}</slot>
             </div>
 
             <div id="expandedViewPlayer" ref="expandedPlayerLocationRef"></div>
@@ -1069,10 +1026,10 @@ $container-breakpoint-md: useBreakpointOrFallback('md', 768px);
   left: 0;
   height: var(--persistent-player-height);
   position: fixed;
-  z-index: var(--persistent-player-z-index);
+  z-index: 999999;
   width: 100%;
   color: var(--text-color);
-  background-color: var(--persistent-player-bg);
+  background-color: var(--purple);
   transition: bottom 0.25s, height calc(var(--transition-duration) * 2);
   -webkit-transition: bottom 0.25s, height calc(var(--transition-duration) * 2);
   display: flex;
@@ -1283,14 +1240,9 @@ $container-breakpoint-md: useBreakpointOrFallback('md', 768px);
       }
     }
 
-    width: var(--persistent-player-image-size);
-    max-width: var(--persistent-player-image-size);
-    height: var(--persistent-player-image-size);
-
-    //flex: 1 0 var(--persistent-player-image-size);
-    .image-with-caption {
-      width: var(--persistent-player-image-size);
-    }
+    width: var(--persistent-player-height);
+    max-width: var(--persistent-player-height);
+    height: var(--persistent-player-height);
   }
 
   // secondary button override

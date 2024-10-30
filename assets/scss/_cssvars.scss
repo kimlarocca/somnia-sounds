@@ -2,8 +2,7 @@
 [data-style-mode='light'],
 .style-mode-light {
     color-scheme: light;
-
-    --background: #{map-get($colors, 'background')};
+    --background: #{$backgroundGradient1};
     --background2: #{map-get($colors, 'background2')};
     --background3: #{map-get($colors, 'background3')};
     --background4: #{map-get($colors, 'background4')};
@@ -137,6 +136,8 @@
     --focus-outline-offset: #{$focusOutlineOffset};
     --focus-shadow: #{$focusShadow};
     --focus-ring: #{$focusShadow};
+
+    --bottom-menu-height: #{$bottomMenuHeight};
 }
 [data-style-mode='dark'],
 .style-mode-dark {

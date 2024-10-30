@@ -1,7 +1,3 @@
-// Homepage data
-// // global state for the Bff useHomepageData data
-// export const useHomepageData = () => useState('useHomepageData', () => null)
-
 // default settings that are overwritten by user data
 const localUserProfileDefault: object = {
     autodownload: false,
@@ -11,13 +7,11 @@ const localUserProfileDefault: object = {
     dark_mode: false,
     sleep_timer: 90,
 }
+
 /**
  * Global state for the settings data
  */
 export const useLocalUserProfileDefault = () => useState('localUserProfileDefault', () => localUserProfileDefault)
-
-// keep track of dark mode
-export const useIsDarkMode = () => useState('useIsDarkMode', () => false)
 
 const currentUser = null
 // global state for the current authorized user
@@ -71,16 +65,11 @@ export const useEditProfileSideBar = () => useState('useEditProfileSideBar', () 
 // create an account or log in bottom sidebar state
 export const useAccountPromptSideBar = () => useState('useAccountPromptSideBar', () => false)
 
-// delete an account sidebar state
-export const useAccountDeleteSideBar = () => useState('useAccountDeleteSideBar', () => false)
-
 // global state for the network connection
 export const useIsNetworkConnected = () => useState('useIsNetworkConnected', () => true)
 
-
 // global state if this instance is a native app
 export const useIsApp = () => useState('useIsApp', () => false)
-
 
 // audio player globals
 const currentEpisodeObj = null
@@ -192,12 +181,6 @@ export const useFileSystem = () => useState('fileSystem', () => fileSystem)
 // const fileSystemLS: any = await Preferences.get({ key: 'files' })
 // export const useFileSystemLS = () => useState('fileSystemLS', () => JSON.parse(fileSystemLS.value) || [])
 export const useFileSystemLS = () => useState('fileSystemLS', () => [])
-
-const bottomMenuState: object = {}
-/**
- * Global state for the bottom navigation
- */
-export const useBottomMenuState = () => useState('bottomMenuState', () => bottomMenuState)
 
 const textSizeOptionsArr = [
     { label: 'Normal', value: 'Normal', pixel: '16px' },
