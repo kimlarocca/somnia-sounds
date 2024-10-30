@@ -1,8 +1,8 @@
 <script setup>
-import { Device } from "@capacitor/device"
-import useSleepTimer from "~/composables/useSleepTimer"
-import SleepIcon from "~/components/icons/SleepIcon.vue"
-import { useBackgroundMode } from "~/composables/useBackgroundMode"
+import { Device } from '@capacitor/device'
+import useSleepTimer from '~/composables/useSleepTimer'
+import SleepIcon from '~/components/icons/SleepIcon.vue'
+import { useBackgroundMode } from '~/composables/useBackgroundMode'
 const {
   sleepTimerSelectedTime,
   sleepTimerCurrentTime,
@@ -14,25 +14,25 @@ const {
   onUpdateDuration,
   sleepTimerPaused,
   updateUserPreferences,
-  getUserPreferenceSleepTime,
+  getUserPreferenceSleepTime
 } = useSleepTimer()
-import { useGlobalToast } from "~/composables/states"
+import { useGlobalToast } from '~/composables/states'
 const globalToast = useGlobalToast()
 const { platform, osVersion } = await Device.getInfo()
 const { initBackgroundMode } = useBackgroundMode()
 
 const timeLengthOptions = [
-  { label: "15 minutes", value: 900 },
-  { label: "30 minutes", value: 1800 },
-  { label: "45 minutes", value: 2700 },
-  { label: "60 minutes", value: 3600 },
+  { label: '15 minutes', value: 900 },
+  { label: '30 minutes', value: 1800 },
+  { label: '45 minutes', value: 2700 },
+  { label: '60 minutes', value: 3600 }
 ]
 
 const timeToIncrement = 5
 const customTime = ref(await getUserPreferenceSleepTime())
 
 // increment or decrement the custom time
-const handleCustomTimeChange = (inc) => {
+const handleCustomTimeChange = inc => {
   const seconds = inc ? timeToIncrement * 60 : -timeToIncrement * 60
   if (customTime.value + seconds / 60 >= 5) {
     customTime.value += seconds / 60
@@ -41,7 +41,7 @@ const handleCustomTimeChange = (inc) => {
   }
 }
 // increment or decrement the current time
-const handleCurrentTimeChange = (inc) => {
+const handleCurrentTimeChange = inc => {
   const seconds = inc ? timeToIncrement * 60 : -timeToIncrement * 60
   const destination = sleepTimerCurrentTime.value + seconds
   if (sleepTimerRunning.value && destination > 0) {
@@ -50,27 +50,28 @@ const handleCurrentTimeChange = (inc) => {
 }
 
 // start the timer
-const handleStartTimer = async (obj) => {
+const handleStartTimer = async obj => {
   // ios only
-  if (platform === "ios" && parseInt(osVersion) < 17) {
+  if (platform === 'ios' && parseInt(osVersion) < 17) {
     globalToast.value = {
-      severity: "error",
-      summary: "Sleep Timer requires iOS 17 or later",
+      severity: 'error',
+      summary: 'Sleep Timer requires iOS 17 or later',
       life: 3000,
-      closable: true,
+      closable: true
     }
     return
   }
 
   // allow for background interval on android only
-  if (platform === "android") {
+  if (platform === 'android') {
     if (!(await initBackgroundMode())) {
       // user did not allow the background mode
       globalToast.value = {
-        severity: "error",
-        summary: "You must allow WNYC to run in the background for the sleep timer",
+        severity: 'error',
+        summary:
+          'You must allow WNYC to run in the background for the sleep timer',
         life: 8000,
-        closable: true,
+        closable: true
       }
       return
     }
@@ -85,9 +86,12 @@ const handleStartTimer = async (obj) => {
   <div>
     <div class="sleep-timer px-3 pb-8 pt-6">
       <div><SleepIcon :active="sleepTimerRunning" /></div>
-      <h1 class="my-3 text-center" :class="[{ 'text-center': sleepTimerRunning }]">
-        We'll lull you to sleep in:
-      </h1>
+      <h3
+        class="my-3 text-center"
+        :class="[{ 'text-center': sleepTimerRunning }]"
+      >
+        We'll stop the audio in:
+      </h3>
       <div
         v-if="!sleepTimerRunning"
         class="flex flex-column w-full align-items-stretch gap-3 style-mode-light"
@@ -112,7 +116,10 @@ const handleStartTimer = async (obj) => {
                 class="flex align-items-center justify-content-between"
                 @click="
                   handleStartTimer({
-                    value: { value: customTime * 60, label: `${customTime} minutes` },
+                    value: {
+                      value: customTime * 60,
+                      label: `${customTime} minutes`
+                    }
                   })
                 "
               >
@@ -147,13 +154,16 @@ const handleStartTimer = async (obj) => {
       </div>
       <div v-else>
         <div class="count-down">
-          <div class="time-holder flex align-items-center justify-content-between">
+          <div
+            class="time-holder flex align-items-center justify-content-between"
+          >
             <Button
               class="mr-3"
-              :class="[{ 'opacity-20': sleepTimerCurrentTime < timeToIncrement * 60 }]"
+              :class="[
+                { 'opacity-20': sleepTimerCurrentTime < timeToIncrement * 60 }
+              ]"
               icon="pi pi-minus"
               rounded
-              outlined
               severity="secondary"
               aria-label="subtract time"
               @click="handleCurrentTimeChange(false)"
@@ -164,17 +174,34 @@ const handleStartTimer = async (obj) => {
               class="ml-3"
               icon="pi pi-plus"
               rounded
-              outlined
               severity="secondary"
               aria-label="add time"
               @click="handleCurrentTimeChange(true)"
             />
           </div>
-          <div class="flex">
-            <Button v-if="sleepTimerPaused" @click="startTimer">Resume</Button>
-            <Button v-else @click="pauseTimer">Pause</Button>
+          <div class="flex align-items-center mt-2 gap-3">
+            <Button
+              v-if="sleepTimerPaused"
+              @click="startTimer"
+              class="topic-btn text-sm white-space-nowrap"
+            >
+              resume
+            </Button>
+            <Button
+              v-else
+              @click="pauseTimer"
+              class="topic-btn text-sm white-space-nowrap"
+            >
+              pause
+            </Button>
+            <Button
+              @click="resetTimer"
+              severity="secondary"
+              class="topic-btn text-sm white-space-nowrap"
+            >
+              cancel
+            </Button>
           </div>
-          <Button @click="resetTimer" severity="secondary">Cancel</Button>
         </div>
       </div>
     </div>
@@ -209,7 +236,6 @@ const handleStartTimer = async (obj) => {
     .time-holder {
       .time {
         font-size: 3.5rem;
-        font-weight: bold;
         line-height: 3rem;
       }
     }

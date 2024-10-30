@@ -207,13 +207,8 @@ const handleNotificationChange = async e => {
         <div class="s-title">Support</div>
       </div>
       <SBox
-        label="Donate"
-        link="https://somniasounds.com/donate"
-        :ripple="false"
-      />
-      <SBox
         label="Tech support"
-        link="https://somniasounds.com/contact"
+        link="https://somniasounds.com/support"
         :ripple="false"
       />
       <SBox
