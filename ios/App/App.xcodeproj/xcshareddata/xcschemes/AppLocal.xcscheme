@@ -52,18 +52,13 @@
       </BuildableProductRunnable>
       <EnvironmentVariables>
          <EnvironmentVariable
-            key = "BFF_URL"
-            value = "https://demo.native-app.wnyc.org"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
             key = "SUPABASE_URL"
-            value = "https://dyjmrswsrewafrohnfcv.supabase.co"
+            value = "https://uhqlxyalbxtrtvduigiv.supabase.co"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "SUPABASE_KEY"
-            value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5am1yc3dzcmV3YWZyb2huZmN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY1OTYxMjQsImV4cCI6MjAwMjE3MjEyNH0.rM2yQmxsH9k5hb_1HvW8nMedB7YMEvYd3HQjin8kefo"
+            value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocWx4eWFsYnh0cnR2ZHVpZ2l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjIxMjUxMzIsImV4cCI6MjAzNzcwMTEzMn0.EKOT6_UOYhwDE8Lt53R0czLfitkLxC2ET_67ZHzEO5Q"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

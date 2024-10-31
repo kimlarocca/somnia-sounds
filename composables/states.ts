@@ -1,10 +1,8 @@
 // default settings that are overwritten by user data
 const localUserProfileDefault: object = {
     autodownload: false,
-    default_live_stream: 'WNYC 93.9 FM',
     receive_general_notifications: false,
     text_size: 'Normal',
-    dark_mode: false,
     sleep_timer: 90,
 }
 

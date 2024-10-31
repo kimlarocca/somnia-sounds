@@ -306,6 +306,10 @@ label {
 
 .p-button {
   border-radius: 2rem;
+  &:hover {
+    background-color: var(--purple);
+    opacity: .8;
+  }
   &.center {
     justify-content: center;
     i {
@@ -339,11 +343,18 @@ label {
   }
 }
 
+.p-button-danger {
+  background-color: var(--red-500);
+  color: #ffffff;
+  &:hover {
+    background-color: var(--red-600);
+  }
+}
+
 .p-button:focus,
 .p-link:focus,
 button:focus,
 a:focus,
-.flexible-link:focus,
 .card-click:focus,
 .p-focus {
   //outline: solid 2px var(--focus-outline-color);

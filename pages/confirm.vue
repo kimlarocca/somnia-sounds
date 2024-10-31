@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { getAndSetUserProfile } from "~/utilities/helpers"
+import { getAndSetUserProfile } from '~/utilities/helpers'
 useHead({
   bodyAttrs: {
-    class: "no-bottom-padding hide-bottom-menu background-gradient style-mode-dark",
-  },
+    class:
+      'no-bottom-padding hide-bottom-menu background-gradient style-mode-dark'
+  }
 })
 
 definePageMeta({
-  layout: "default",
+  layout: 'default'
 })
 
 const user = useSupabaseUser()
@@ -17,7 +18,7 @@ watch(
     if (user.value) {
       await nextTick()
       await getAndSetUserProfile()
-      navigateTo("/home")
+      navigateTo('/home')
     }
   },
   { immediate: true }
@@ -25,7 +26,7 @@ watch(
 </script>
 <template>
   <section class="loading-holder">
-    <WnycLoader class="loader-anim" />
+    <ProgressSpinner />
   </section>
 </template>
 
@@ -37,16 +38,5 @@ watch(
   width: 100vw;
   left: 0;
   right: 0;
-
-  .loader-anim {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    width: 100px;
-    height: 50px;
-  }
 }
 </style>

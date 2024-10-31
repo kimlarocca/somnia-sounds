@@ -69,7 +69,7 @@ const handleStartTimer = async obj => {
       globalToast.value = {
         severity: 'error',
         summary:
-          'You must allow WNYC to run in the background for the sleep timer',
+          'You must allow Somnia Sounds to run in the background for the sleep timer',
         life: 8000,
         closable: true
       }

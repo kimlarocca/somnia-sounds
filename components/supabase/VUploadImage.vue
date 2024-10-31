@@ -7,53 +7,53 @@ import { computed, ref, shallowRef } from 'vue'
 const props = defineProps({
   accept: {
     default: 'image/*',
-    type: String,
+    type: String
   },
   bucket: {
     default: 'avatars',
-    type: String,
+    type: String
   },
   client: {
     default: null,
-    type: Object,
+    type: Object
   },
   config: {
     default: null,
-    type: Object,
+    type: Object
   },
   currentUser: {
     default: null,
-    type: Object,
+    type: Object
   },
   currentUserProfile: {
     default: null,
-    type: Object,
+    type: Object
   },
   fileLimit: {
     default: 1,
-    type: Number,
+    type: Number
   },
   image: {
     default: '',
     required: true,
-    type: [String, null],
+    type: [String, null]
   },
   label: {
     default: 'Upload Image',
-    type: String,
+    type: String
   },
   maxFileSize: {
     default: 1000000,
-    type: Number,
+    type: Number
   },
   success: {
     default: '<p>Success! <br/> Your changes have been saved.</p>',
-    type: String,
+    type: String
   },
   table: {
     default: 'profiles',
-    type: String,
-  },
+    type: String
+  }
 })
 
 const emit = defineEmits(['image-uploaded', 'close-dialog'])
@@ -74,7 +74,7 @@ const successMessage = shallowRef()
 const imageUrl = shallowRef(props.image)
 
 // upload the image to supabase storage and handle messaging
-const uploadImage = async (event) => {
+const uploadImage = async event => {
   try {
     uploading.value = true
     const file = event.files[0]
@@ -98,7 +98,7 @@ const uploadImage = async (event) => {
       .upsert({
         avatar_image_url: imageUrl.value,
         id: props.currentUser.id,
-        updated_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       })
       .match({ id: props.currentUser.id })
     if (error) {
@@ -122,7 +122,7 @@ const deleteImage = async () => {
     .upsert({
       avatar_image_url: null,
       id: props.currentUser.id,
-      updated_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     })
     .match({ id: props.currentUser.id })
   if (error) {
@@ -136,7 +136,7 @@ const deleteImage = async () => {
 }
 
 const uploadLabel = computed(() => {
-  return imageUrl.value ? 'Upload new image' : props.label
+  return imageUrl.value ? 'upload new image' : props.label
 })
 
 const fileUpload = ref(null)
@@ -145,7 +145,7 @@ function triggerFileUpload() {
   let clickEvent = new MouseEvent('click', {
     bubbles: true,
     cancelable: true,
-    view: window,
+    view: window
   })
   fileInput.dispatchEvent(clickEvent)
 }
@@ -186,8 +186,8 @@ function triggerFileUpload() {
     <slot v-else name="above-button"> </slot>
     <Button
       v-if="imageUrl"
-      label="Done"
-      class="mb-3 w-full"
+      label="done"
+      class="mb-5 w-full"
       @click="() => emit('close-dialog')"
     />
     <div class="flex w-full">
@@ -207,10 +207,10 @@ function triggerFileUpload() {
     </div>
     <Button
       v-if="imageUrl"
-      label="Remove Image"
+      label="delete image"
       icon="pi pi-trash"
       text
-      class="p-button-danger my-4"
+      class="p-button-danger mt-3 w-full"
       @click="deleteImage"
     />
 
@@ -229,18 +229,6 @@ function triggerFileUpload() {
   }
   .p-fileupload {
     width: 100%;
-  }
-}
-</style>
-<style lang="scss">
-.upload-image {
-  .p-fileupload {
-    width: 100%;
-    .p-button:hover {
-      color: var(--night-500);
-      background: #fff;
-      border: 1px solid var(--stroke-500);
-    }
   }
 }
 </style>

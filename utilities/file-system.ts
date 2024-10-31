@@ -436,8 +436,6 @@ export const playStoredMp3 = async (file) => {
         } catch (e) {
             console.error("Unable to read file", e)
         }
-        // not sure how we would handle tracking the saveRecentlyPlayed without a connection. If this were to become a feature, we would need to save the file to local storage and then save it to the server when a connection is re-established
-        //saveRecentlyPlayed(file, file.type)
     }
 
     togglePlayTrigger.value = !togglePlayTrigger.value

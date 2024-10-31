@@ -59,21 +59,13 @@ const handleModal = () => {
     emit('onDisabled')
   }
 }
-
-const avatarUrl = computed(() => {
-  return (
-    currentUser.value?.user_metadata?.avatar_url ||
-    currentUserProfile.value?.avatar_image_url ||
-    null
-  )
-})
 </script>
 
 <template>
   <div class="s-user flex gap-3">
     <Avatar
       v-if="currentUser"
-      :image="avatarUrl"
+      :image="currentUserProfile.avatar_image_url"
       size="large"
       :style="`
         cursor: ${props.disabled ? 'default' : 'pointer'};
@@ -81,9 +73,9 @@ const avatarUrl = computed(() => {
       shape="circle"
       @click="handleModal"
     >
-      <template #icon v-if="!avatarUrl">
+      <template #icon v-if="!currentUserProfile.avatar_image_url">
         <Button
-          v-if="currentUser && props.isEmail"
+          v-if="currentUser && isEmail"
           icon="pi pi-plus"
           severity="secondary"
           rounded
@@ -138,13 +130,15 @@ const avatarUrl = computed(() => {
   .user-icon path {
     color: var(--night--500);
   }
+  .pi-user {
+    color: var(--background2);
+  }
   .p-avatar {
     width: 40px;
     height: 40px;
     position: relative;
     flex: none;
     background-color: #ffffff;
-    color: var(--night--500);
     border-radius: 50%;
     img {
       object-fit: cover;

@@ -98,22 +98,11 @@ const onClick = () => {
   }
   &.is-link {
     padding: 0;
-    .flexible-link {
-      .p-button {
-        padding-left: 1.25rem;
-        padding-right: 1.25rem;
-        color: var(--night);
-        font-weight: var(--font-weight-500);
-        &:hover {
-          background: var(--background3);
-        }
-      }
-    }
   }
   .content {
     width: 100%;
     height: 100%;
-    font-size: 0.8125rem;
+    font-size: 1rem;
   }
   .label {
     font-size: 1rem;

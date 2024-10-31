@@ -1,6 +1,6 @@
 <script setup>
 import { useCurrentEpisode, useTogglePlayTrigger } from '~/composables/states'
-import { saveRecentlyPlayed, prepForPlayer } from '~/utilities/helpers'
+import { prepForPlayer } from '~/utilities/helpers'
 
 const currentEpisode = useCurrentEpisode()
 const searchFieldValue = ref('')
@@ -43,7 +43,6 @@ const items = ref([
 const togglePlayHere = item => {
   if (currentEpisode.value?.id !== item.id) {
     currentEpisode.value = prepForPlayer(item)
-    saveRecentlyPlayed(item)
   }
   togglePlayTrigger.value = !togglePlayTrigger.value
 }
@@ -69,7 +68,7 @@ const togglePlayHere = item => {
         />
         <Button
           class="topic-btn text-sm white-space-nowrap"
-          label="infinite soundscapes"
+          label="soundscapes"
           :aria-label="`infinite soundscapes category button`"
         />
         <Button
@@ -94,7 +93,7 @@ const togglePlayHere = item => {
             <i v-else class="pi pi-search text-color" />
             <InputText
               v-model="searchFieldValue"
-              placeholder="keyword search"
+              placeholder="search for sounds"
               class="search-field w-full"
             />
             <Button

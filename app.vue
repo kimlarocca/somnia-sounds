@@ -23,7 +23,6 @@ import {
 import { useBrowserTopColor } from '~/composables/globals'
 import { initLocalNotifications } from '~/utilities/local-notifications'
 import { Network } from '@capacitor/network'
-// import { updateAllLiveStreams } from "~/composables/data/liveStream"
 import { useToast } from 'primevue/usetoast'
 import { initMediaSession } from '~/utilities/media-session.js'
 import { useNewFeatureBadge } from '~/composables/useNewFeatureBadge'
@@ -61,7 +60,6 @@ const refreshData = async () => {
   await getAndSetUserProfile()
 
   // refresh data here
-  // updateAllLiveStreams()
 
   try {
     await refreshNuxtData()
@@ -233,45 +231,35 @@ watch(globalError, error => {
     <Head>
       <Link rel="canonical" :href="`https://wnyc.org${route.path}`" />
       <Link rel="stylesheet" :href="config.public.HTL_CSS" type="text/css" />
-      <Title>
-        WNYC | New York Public Radio, Podcasts, Live Streaming Radio, News
-      </Title>
+      <Title> Somnia Sounds </Title>
       <Meta
         name="description"
-        content="WNYC is America's most listened-to public radio station and the producer of award-winning programs and podcasts like Radiolab, On the Media, and The Brian Lehrer Show."
+        content="Somina Sounds helps you relax and sleep better with soothing sounds and meditations."
       />
-      <Meta
-        name="keywords"
-        content="wnyc, podcasts, npr, new york, WNYC Studios, arts, culture, classical, music, news, public, radio"
-      />
-      <Meta
-        name="og:site_name"
-        content="WNYC | New York Public Radio, Podcasts, Live Streaming Radio, News"
-      />
+      <Meta name="keywords" content="somnia sounds" />
+      <Meta name="og:site_name" content="Somnia Sounds" />
       <Meta name="og:type" content="website" />
       <Meta name="og:url" :content="`https://www.wnyc.org${route.fullPath}`" />
-      <Meta
-        name="og:title"
-        content="WNYC | New York Public Radio, Podcasts, Live Streaming Radio, News"
-      />
+      <Meta name="og:title" content="Somnia Sounds" />
       <Meta
         name="og:description"
-        content="WNYC is America's most listened-to public radio station and the producer of award-winning programs and podcasts like Radiolab, On the Media, and The Brian Lehrer Show."
+        content="Somina Sounds helps you relax and sleep better with soothing sounds and meditations."
       />
+      <!-- kim TO DO -->
       <Meta
         name="og:image"
         content="https://media.wnyc.org/i/1200/1200/c/80/1/wnyc_square_logo.png"
       />
-      <Meta name="og:image:alt" content="WNYC" />
+      <Meta name="og:image:alt" content="Somnia Sounds" />
       <Meta name="og:image:width" content="1200" />
       <Meta name="og:image:height" content="600" />
       <Meta name="fb:app_id" content="151261804904925" />
       <Meta name="twitter:card" content="summary_large_image" />
       <Meta name="twitter:site" content="@radiolab" />
-      <Meta name="twitter:title" content="WNYC" />
+      <Meta name="twitter:title" content="Somnia Sounds" />
       <Meta
         name="twitter:description"
-        content="WNYC | New York Public Radio, Podcasts, Live Streaming Radio, News"
+        content="Somina Sounds helps you relax and sleep better with soothing sounds and meditations"
       />
       <Meta
         name="twitter:image"

@@ -22,15 +22,11 @@ import {
   cmsSources,
   mediaTypeRoutes,
   localUserProfileKey,
-  FALLBACKIMAGEEP,
-  FALLBACKIMAGEEPHEAD,
   FALLBACKIMAGEEPDARK,
   FALLBACKIMAGEEPHEADDARK,
-  FALLBACKUSER,
   FALLBACKUSERDARK,
   NPRIMAGEDOMAINSOURCES,
 } from "~/composables/globals"
-import { updateAllLiveStreams } from "~/composables/data/liveStream"
 import axios from "axios"
 import { Share } from "@capacitor/share"
 import { Clipboard } from "@capacitor/clipboard"
@@ -468,7 +464,7 @@ export const getFavoritedItems = async () => {
     const { data, error } = await client
       .from("favorited")
       .select("*")
-      .eq("uid", user.value.id)
+      .eq("uuid", user.value.id)
 
     if (error) {
       console.error("favorited items error", error)
@@ -552,9 +548,7 @@ export const getAndSetUserProfile = async () => {
         // if first time logging in with new profile
         data.initial = false
         data.autodownload = ls.autodownload
-        data.default_live_stream = ls.default_live_stream
         data.receive_general_notifications = ls.receive_general_notifications
-        data.dark_mode = ls.dark_mode
         data.text_size = ls.text_size
 
         // update supabase profile data
@@ -564,21 +558,17 @@ export const getAndSetUserProfile = async () => {
           .update({
             initial: false,
             autodownload: ls.autodownload,
-            default_live_stream: ls.default_live_stream,
             receive_general_notifications: ls.receive_general_notifications,
-            dark_mode: ls.dark_mode,
             text_size: ls.text_size,
           })
           .match({ id: currentUser.value.id })
 
         // set the current user profile state
         currentUserProfile.value = data
-        updateAllLiveStreams()
         setDisplaySettings(data)
       } else {
         // set the current user profile state
         currentUserProfile.value = data
-        updateAllLiveStreams()
         setDisplaySettings(data)
       }
     }
@@ -638,7 +628,6 @@ export const getAndSetUserProfile = async () => {
 
           currentUserProfile.value = defaults
 
-          // updateAllLiveStreams()
           //set display settings
           setDisplaySettings(defaults)
         } else {
@@ -657,7 +646,6 @@ export const getAndSetUserProfile = async () => {
             })
           }
 
-          // updateAllLiveStreams()
           //set display settings
           setDisplaySettings(currentUserProfile.value)
         }
@@ -711,26 +699,22 @@ export const deleteFavorite = async (media: object, tableArg = "favorited") => {
   }
 }
 
-// handles saving a favorite or recently played item
+// KIM TO DO
+// handles saving a favorite
 // if a duplicate existingRecord is found, it removes the original and adds the new one
 export const saveFavorite = async (
-  media: object,
-  typeArg: string,
-  tableArg = "favorited"
+  media: object
 ) => {
   const user = useCurrentUser()
   if (user.value) {
     const client = useSupabaseClient()
-    // check if record exists
-    const thisSlug = media?.meta?.slug ?? media?.slug ?? media?.id
     const { data: existingRecord, error: existingError } = await client
-      .from(tableArg)
+      .from("favorites")
       .select("*")
-      .eq("uid", user.value.id)
-      .eq("slug", thisSlug)
+      .eq("uuid", user.value.id)
     if (existingError) throw existingError
     if (existingRecord && existingRecord.length > 0) {
-      await deleteFavorite(existingRecord[0], tableArg)
+      await deleteFavorite(existingRecord[0], "favorites")
     }
     const source = media?.cmsSource
     // format the media object to save
@@ -771,12 +755,6 @@ export const saveFavorite = async (
   }
 }
 
-// KIM TO DO
-// handle saving the last played to the history of the user. data is saved in supabase table called recently_viewed
-export const saveRecentlyPlayed = (media: object) => {
-  // saveFavorite(media, "recently_viewed")
-}
-
 // normalize the bucket item data for the player
 export const prepForPlayer = (item, index = null) => {
   const isSegment = index !== null
@@ -809,18 +787,14 @@ export const prepForPlayer = (item, index = null) => {
 export const togglePlayEpisode = (media, type = mediaTypes.EPISODE, index = 0) => {
   const currentEpisode = useCurrentEpisode()
   const togglePlayTrigger = useTogglePlayTrigger()
-  const isLiveStream = useIsLiveStream()
-  type === mediaTypes.LIVE ? isLiveStream.value = true : isLiveStream.value = false
   if (typeof media.audio === "string") {
     if (currentEpisode.value?.audio !== media.audio) {
       currentEpisode.value = prepForPlayer(media)
-      saveRecentlyPlayed(media, type)
     }
   } else {
     // segment
     if (currentEpisode.value?.file !== media.audio[index]) {
       currentEpisode.value = prepForPlayer(media, index)
-      saveRecentlyPlayed(media, type)
     }
   }
   togglePlayTrigger.value = !togglePlayTrigger.value
@@ -839,9 +813,6 @@ export const goToEpisodePage = (ep, params, log = true) => {
     path: `${mediaTypeRoutes[mediaTypes.EPISODE]}${ep.meta?.slug ?? ep.slug}`,
     query: params,
   })
-  if (log) {
-    saveRecentlyPlayed(ep)
-  }
 }
 
 /* centralized function to route to a story page */
@@ -850,9 +821,6 @@ export const goToStoryPage = (story, params, log = true) => {
     path: `${mediaTypeRoutes[mediaTypes.STORY]}${story.media_id ?? story.id}`,
     query: params,
   })
-  if (log) {
-    saveRecentlyPlayed(story)
-  }
 }
 
 /* centralized function to route to a story page */
@@ -860,9 +828,6 @@ export const goToNprPage = (story, log = true) => {
   navigateTo({
     path: `${mediaTypeRoutes[mediaTypes.NPR_EPISODE]}${story.media_id ?? story.id}`,
   })
-  if (log) {
-    saveRecentlyPlayed(story)
-  }
 }
 /* centralized function to route to a show page */
 export const goToShowPage = (show, params = null) => {

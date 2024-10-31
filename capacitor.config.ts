@@ -1,17 +1,17 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'org.wnyc.android',
-  appName: 'wnyc-app-android',
+  appId: 'org.somniasounds.android',
+  appName: 'somniasounds-app-android',
   webDir: 'dist',
   backgroundColor: "#d4d4d4",
   android: {
     overrideUserAgent: `${process.env.USER_AGENT}`,
-    appendUserAgent: 'Android-WNYC-App'
+    appendUserAgent: 'Android-SomniaSounds-App'
   },
   ios: {
     overrideUserAgent: `${process.env.USER_AGENT}`,
-    appendUserAgent: 'iOS-WNYC-App',
+    appendUserAgent: 'iOS-SomniaSounds-App',
   },
   plugins: {
     CapacitorCookies: {

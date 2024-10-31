@@ -9,19 +9,16 @@ import {
   useCurrentUser,
   useCurrentUserProfile,
   useEditProfileSideBar,
-  useIsLiveStream,
   useIsApp
 } from '~/composables/states.ts'
 import { Preferences } from '@capacitor/preferences'
 import { localUserProfileKey } from '~/composables/globals'
-import { updateLiveStream } from '~/composables/data/liveStream'
 
 const config = useRuntimeConfig()
 const currentUser = useCurrentUser()
 const currentUserProfile = useCurrentUserProfile()
 const textSizeOptions = useTextSizeOption()
 const editProfileSideBar = useEditProfileSideBar()
-const isLiveStream = useIsLiveStream()
 const isApp = useIsApp()
 const client = useSupabaseClient()
 
@@ -89,14 +86,6 @@ watch(currentUserProfile.value, () => {
 // handles setting the font size and tracking the event
 const onUpdateTextSize = () => {
   setFontSize(currentUserProfile.value.text_size.pixel)
-}
-
-// handles tracking the station change event
-const onUpdateStation = () => {
-  // if not playing, update the live stream so the home page updates with the new default stream
-  if (!isLiveStream.value) {
-    updateLiveStream(currentUserProfile.value.default_live_stream.slug)
-  }
 }
 
 const accountHeader = computed(() => {
@@ -202,7 +191,7 @@ const handleNotificationChange = async e => {
         />
       </SBox>
     </section>
-    <section class="wnyc p-0">
+    <section class="p-0">
       <div class="flex s-title-holder">
         <div class="s-title">Support</div>
       </div>
@@ -270,12 +259,6 @@ const handleNotificationChange = async e => {
   }
   .footer {
     text-align: center;
-    .wnyc-logo {
-      width: 60px;
-      height: auto;
-      margin-bottom: 10px;
-      fill: var(--night-500);
-    }
   }
   .p-inplace {
     .p-inplace-display {

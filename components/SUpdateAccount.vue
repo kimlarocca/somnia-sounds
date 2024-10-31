@@ -7,9 +7,6 @@ import {
   required,
   sameAs
 } from '@vuelidate/validators'
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
-import Password from 'primevue/password'
 import {
   useCurrentUser,
   useCurrentUserProfile,
@@ -51,6 +48,7 @@ const formData = reactive({
 const hasFieldChanged = key => {
   return toRaw(formData[key]) !== formDataOriginal[key]
 }
+
 // for checking if the field has changed
 const hasAnyFieldsChanged = () => {
   //console.log('formDataOriginal= ', formDataOriginal)
@@ -76,6 +74,7 @@ const passwordRules = computed(() => {
     return false
   }
 })
+
 // Vuelidate rule for email confirm
 const emailRulesConfirm = computed(() => {
   if (hasFieldChanged('email')) {
