@@ -1,31 +1,30 @@
 <script setup>
-import VFlexibleLink from '../VFlexibleLink.vue'
 import { useVuelidate } from '@vuelidate/core'
-import { email, helpers, minLength, required } from '@vuelidate/validators'
+import { helpers, minLength, required } from '@vuelidate/validators'
 import { useCurrentUser } from '~/composables/states'
 import InputText from 'primevue/inputtext'
 
 const props = defineProps({
   client: {
     default: null,
-    type: Object,
+    type: Object
   },
   error: {
     default: 'Error message:',
-    type: String,
+    type: String
   },
   label: {
     default: 'Save New Password',
-    type: String,
+    type: String
   },
   slug: {
     default: '/dashboard',
-    type: String,
+    type: String
   },
   success: {
     default: 'Success! Your password has been updated.',
-    type: String,
-  },
+    type: String
+  }
 })
 
 const emit = defineEmits(['submit-click', 'submit-error', 'submit-success'])
@@ -40,7 +39,7 @@ if (!props.client) {
 }
 
 const formData = reactive({
-  password: '',
+  password: ''
 })
 
 const sbErrorMsg = ref('')
@@ -50,8 +49,8 @@ const rules = computed(() => {
   return {
     password: {
       minLength: minLength(8),
-      required: helpers.withMessage('The password field is required', required),
-    },
+      required: helpers.withMessage('The password field is required', required)
+    }
   }
 })
 
@@ -66,7 +65,7 @@ const submitForm = async () => {
     //success with Vuelidate
     const sbError = await innerClient.value.auth.updateUser({
       email: currentUser.value.email,
-      password: formData.password,
+      password: formData.password
     })
     if (!sbError.error) {
       //success with Supabase
@@ -105,7 +104,7 @@ const pending = ref(false)
             type="password"
             class="w-full"
             :class="{
-              'p-invalid': v$.password.$error && v$.password.$invalid,
+              'p-invalid': v$.password.$error && v$.password.$invalid
             }"
             placeholder="Your password"
             required
@@ -137,9 +136,7 @@ const pending = ref(false)
           {{ sbSuccessMsg }}
         </Message>
         <p class="mb-2 text-center">
-          <VFlexibleLink :to="`${props.slug}`"
-            >Return to your dashboard
-          </VFlexibleLink>
+          <nuxt-link :to="`${props.slug}`">Return to your dashboard </nuxt-link>
         </p>
       </template>
     </form>

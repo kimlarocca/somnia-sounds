@@ -229,7 +229,7 @@ watch(globalError, error => {
 <template>
   <Html lang="en">
     <Head>
-      <Link rel="canonical" :href="`https://wnyc.org${route.path}`" />
+      <Link rel="canonical" :href="`https://somniasounds.com${route.path}`" />
       <Link rel="stylesheet" :href="config.public.HTL_CSS" type="text/css" />
       <Title> Somnia Sounds </Title>
       <Meta
@@ -239,7 +239,10 @@ watch(globalError, error => {
       <Meta name="keywords" content="somnia sounds" />
       <Meta name="og:site_name" content="Somnia Sounds" />
       <Meta name="og:type" content="website" />
-      <Meta name="og:url" :content="`https://www.wnyc.org${route.fullPath}`" />
+      <Meta
+        name="og:url"
+        :content="`https://www.somniasounds.com${route.fullPath}`"
+      />
       <Meta name="og:title" content="Somnia Sounds" />
       <Meta
         name="og:description"
@@ -261,6 +264,7 @@ watch(globalError, error => {
         name="twitter:description"
         content="Somina Sounds helps you relax and sleep better with soothing sounds and meditations"
       />
+      <!-- KIM TO DO -->
       <Meta
         name="twitter:image"
         content="https://media.wnyc.org/i/1200/1200/c/80/1/wnyc_square_logo.png"

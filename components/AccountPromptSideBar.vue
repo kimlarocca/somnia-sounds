@@ -33,7 +33,7 @@ const bgColorRef = ref(props.bgColor)
         return to them over and over.
       </p>
       <p class="px-4">
-        <VFlexibleLink
+        <nuxt-link
           to="#"
           @click="
             () => {
@@ -43,7 +43,7 @@ const bgColorRef = ref(props.bgColor)
           "
         >
           Login
-        </VFlexibleLink>
+        </nuxt-link>
         to your account to start saving & following.
       </p>
       <p class="px-4">

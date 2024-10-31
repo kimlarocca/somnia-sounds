@@ -1,4 +1,5 @@
 <script setup>
+import { getFavoritedItems } from '~/utilities/helpers'
 definePageMeta({
   layout: 'default',
   layoutTransition: {
@@ -10,6 +11,11 @@ useHead({
   bodyAttrs: {
     class: 'show-header'
   }
+})
+
+const favorites = ref(null)
+onMounted(async () => {
+  await getFavoritedItems()
 })
 </script>
 
@@ -25,7 +31,8 @@ useHead({
 
     <section>
       <h1 class="mb-4">Saved</h1>
-      <p>Coming soon!</p>
+      <p class="mb-4">Coming soon!</p>
+      <p>{{ favorites }}</p>
     </section>
   </div>
 </template>
