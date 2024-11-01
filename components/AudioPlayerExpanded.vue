@@ -22,9 +22,7 @@ const { handleSleepTimer } = useSleepTimer()
 const isFavorited = ref(false)
 
 watchEffect(async () => {
-  isFavorited.value = await checkIsFavorited(
-    currentEpisode.value.showSlug || currentEpisode.value.slug
-  )
+  isFavorited.value = await checkIsFavorited(currentEpisode.value.id)
 })
 
 // add item to favorites
@@ -58,11 +56,11 @@ const handleDownload = async () => {
           severity="secondary"
           rounded
           aria-label="add to favorites"
-          @click="handleAddToFavorites"
+          @click="addToFavorites(currentEpisode, isFavorited)"
         >
           <template #icon>
-            <StarIcon :class="{ isFavorited, active }"
-          /></template>
+            <StarIcon :class="{ favorited: isFavorited }" />
+          </template>
         </Button>
         <Button
           text

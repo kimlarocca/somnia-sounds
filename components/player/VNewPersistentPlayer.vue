@@ -156,7 +156,7 @@ const props = defineProps({
    * loop the audio when complete
    */
   loop: {
-    default: false,
+    default: true,
     type: Boolean
   },
   marquee: {
@@ -204,7 +204,7 @@ const props = defineProps({
   //   type: Boolean,
   // },
   /**
-   * show the skip buttons
+   * show the volumn buttons
    */
   showVolume: {
     default: false,

@@ -238,7 +238,7 @@ onMounted(async () => {
     currentEpisodeProgress.value = 0
     // this is work webview detecting the end of the audio
     if (e?.ended) {
-      episodeEnded()
+      // episodeEnded() // kim commented this out so we can loop the audio
     }
   })
   await RemoteStreamer.addListener('ended', e => {
@@ -246,7 +246,7 @@ onMounted(async () => {
     isStreamLoading.value = false
     currentEpisodeProgress.value = 0
     if (e.ended) {
-      episodeEnded()
+      // episodeEnded() // kim commented this out so we can loop the audio
     }
   })
 })
