@@ -402,7 +402,7 @@ export const checkIsFavorited = async (itemId) => {
     const favorites = useCurrentUserFavorites()
     if (favorites.value) {
       const result = favorites.value.find(
-        (item) => item.id === itemId || item.sounds?.id === itemId
+        (item) => item.sounds?.id === itemId
       )
       return result ? true : false
     }
