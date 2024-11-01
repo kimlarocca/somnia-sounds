@@ -207,6 +207,7 @@ a {
     border: none !important;
     box-shadow: none;
     border-radius: 0;
+    color: var(--text-color) !important;
     background-color: var(--background4) !important;
     .p-toast-message-content {
       justify-content: center;
@@ -319,6 +320,9 @@ label {
       flex: none;
     }
   }
+  &.active {
+    background-color: var(--orange);
+  }
   &.link {
     padding: 0;
     margin: 0;
@@ -395,8 +399,9 @@ a:visited {
 }
 
 .p-button.p-button-text.p-button-plain:enabled:hover {
-  background: var(--button-hover-plain-background);
+  background: var(--purple);
   color: var(--text-color);
+  opacity: .8;
 }
 
 .p-inputtext {

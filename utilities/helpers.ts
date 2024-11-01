@@ -12,20 +12,14 @@ import {
   useGlobalToast,
   useAccountPromptSideBar,
   useIsNetworkConnected,
-  useIsLiveStream,
 } from "~/composables/states"
 import { Capacitor } from "@capacitor/core"
 import { Preferences } from "@capacitor/preferences"
 import { NativeSettings, AndroidSettings, IOSSettings } from "capacitor-native-settings"
 import { Browser } from "@capacitor/browser"
 import {
-  cmsSources,
-  mediaTypeRoutes,
   localUserProfileKey,
   FALLBACKIMAGEEPDARK,
-  FALLBACKIMAGEEPHEADDARK,
-  FALLBACKUSERDARK,
-  NPRIMAGEDOMAINSOURCES,
 } from "~/composables/globals"
 import axios from "axios"
 import { Share } from "@capacitor/share"
@@ -336,16 +330,7 @@ export function setFontSize(size: string) {
 
 // function to get the EPISODE fallback image for the episode
 export const getEpisodeFallBackImage = () => {
-  return FALLBACKIMAGEEPDARK}
-
-// function to get the EPISODE HEADER fallback image for the episode
-export const getEpisodeHeadFallBackImage = () => {
-  return FALLBACKIMAGEEPHEADDARK}
-
-// function to get the USER icon fall back image
-export const getUserFallBackImage = () => {
-  return FALLBACKUSERDARK
-
+  return FALLBACKIMAGEEPDARK
 }
 
 // helper function to get the pixel size from thr label
@@ -361,11 +346,6 @@ export const getTextSizePixel = (label) => {
 // set the display settings in one place
 export const setDisplaySettings = async (data) => {
   setFontSize(getTextSizePixel(data.text_size))
-}
-
-// generate a random number between min and max
-export const getRandomNumber = (min, max) => {
-  return Math.random() * (max - min) + min
 }
 
 // will take the user to their native os system settings
@@ -386,65 +366,7 @@ export async function openLinkInAppBrowser(url: string) {
   await Browser.open({ url })
 }
 
-
-// global funcrtion for copying to clipboard
-export const copyToClipBoard = async (content: string) => {
-  const globalToast = useGlobalToast()
-  try {
-    await Clipboard.write({
-      string: content,
-    })
-    globalToast.value = {
-      severity: "info",
-      summary: "Copied to clipboard",
-      life: 3000,
-    }
-  } catch (err) {
-    console.error("Failed to copy text: ", err)
-    globalToast.value = {
-      severity: "error",
-      summary: "Failed to copy to the clipboard",
-      life: 3000,
-    }
-  }
-}
-
-// helper function to remove HTML tags from a string
-export const removeHTMLTags = (str) => {
-  const parser = new DOMParser()
-  const parsedHTML = parser.parseFromString(str, "text/html")
-  return parsedHTML.body.textContent ?? ""
-}
-// share API
-export const shareAPI = async (
-  content: object,
-  componentOfOrigin = "Component of origin not specified"
-) => {
-  // DESKTOP sharing is not supported yet
-  const shareContent = {
-    title: removeHTMLTags(content.title),
-    text: removeHTMLTags(content.details || content.description || content.title),
-    url: content.url || content.titleLink, // titleLink is for live streams
-  }
-
-  if (Capacitor.getPlatform() === "ios" || Capacitor.getPlatform() === "android") {
-    await Share.share({
-      // title: shareContent.title,
-      // text: shareContent.text,
-      url: content.url,
-      dialogTitle: "Share with buddies",
-    })
-  } else {
-    try {
-      await navigator.share(shareContent)
-    } catch (error) {
-      copyToClipBoard(shareContent.url)
-      //console.error('Error sharing', error)
-    }
-  }
-}
-
-// handle the delete of the stored audio file and GA tracking
+// handle the delete of the stored audio file
 export const handleDelete = (file) => {
   const globalToast = useGlobalToast()
   deleteDirectory(file)
@@ -463,7 +385,7 @@ export const getFavoritedItems = async () => {
     const client = useSupabaseClient()
     const { data, error } = await client
       .from("favorited")
-      .select("*")
+      .select("*, sounds ( * )")
       .eq("uuid", user.value.id)
 
     if (error) {
@@ -474,24 +396,18 @@ export const getFavoritedItems = async () => {
 }
 
 // check if an item is favorited
-export const checkIsFavorited = (slug: string) => {
+export const checkIsFavorited = async (itemId) => {
   const user = useCurrentUser()
   if (user.value) {
     const favorites = useCurrentUserFavorites()
     if (favorites.value) {
       const result = favorites.value.find(
-        (item) => item.slug === slug || item.media_id === slug
+        (item) => item.id === itemId || item.sounds?.id === itemId
       )
       return result ? true : false
     }
   }
   return false
-}
-
-// time converter
-export const convertTime = (val) => {
-  const hhmmss = new Date(val * 1000).toISOString().substring(11, 19)
-  return hhmmss.startsWith("00:") ? hhmmss.substring(3) : hhmmss
 }
 
 // get and set the user profile
@@ -661,6 +577,7 @@ export const getAndSetUserProfile = async () => {
     }
   }
 }
+
 interface SavedItem {
   uid: string
   type: string
@@ -677,78 +594,33 @@ interface SavedItem {
   showTitle: string
 }
 
-export const deleteFavorite = async (media: object, tableArg = "favorited") => {
+export const deleteFavorite = async (soundId) => {
   // detect if logged in
   const user = useCurrentUser()
   if (user.value) {
-    // format the media object to save
-    const uid = user.value?.id
-    const slug = media?.slug ?? media?.meta.slug
-    //const media_id = media.media_id ?? media?.id
-    //save instance to Supabase
     const client = useSupabaseClient()
     const { error } = await client
-      .from(tableArg)
+      .from('favorited')
       .delete()
-      .eq("uid", uid)
-      .or(`slug.eq.${slug}`)
-
+      .eq("sound_id", soundId)
     if (error) {
       console.error("error deleting favorite", error)
     }
   }
 }
 
-// KIM TO DO
 // handles saving a favorite
-// if a duplicate existingRecord is found, it removes the original and adds the new one
-export const saveFavorite = async (
-  media: object
-) => {
+export const saveFavorite = async (soundId) => {
   const user = useCurrentUser()
   if (user.value) {
     const client = useSupabaseClient()
-    const { data: existingRecord, error: existingError } = await client
-      .from("favorites")
-      .select("*")
-      .eq("uuid", user.value.id)
-    if (existingError) throw existingError
-    if (existingRecord && existingRecord.length > 0) {
-      await deleteFavorite(existingRecord[0], "favorites")
-    }
-    const source = media?.cmsSource
-    // format the media object to save
-    // the fallbacks take into account if the user is selecting  an item that was fed by the CMS or Supabase
-    const uid = user.value?.id
-    const cmsSource = source
-    const media_id = media?.media_id ?? media?.id
-    const slug = thisSlug
-    const type = typeArg
-    const reading_time = media?.reading_time ?? getReadingTime(media?.rawBody)
-    const image = media?.image
-    const title = media?.title
-    const producingOrganizations = media?.producingOrganizations
-    const authors = media?.authors
-    const meta = media?.meta
-    const audio = media?.audio ?? media?.hls
-    const showTitle = media?.showTitle ?? media?.headers?.brand?.title ?? media?.station
-    const itemToSave: SavedItem = {
-      uid,
-      type,
-      cmsSource,
-      media_id,
-      slug,
-      reading_time,
-      image,
-      title,
-      authors,
-      producingOrganizations,
-      meta,
-      audio,
-      showTitle,
-    }
-    //save instance to Supabase
-    const { error } = await client.from(tableArg).insert([itemToSave])
+    const { error } = await client
+      .from('favorited')
+      .upsert({
+        uuid: user.value.id,
+        sound_id: soundId,
+      })
+      .match({ uuid: user.value.id })
     if (error) {
       console.error("error = ", error)
     }
@@ -800,49 +672,6 @@ export const togglePlayEpisode = (media, type = mediaTypes.EPISODE, index = 0) =
   togglePlayTrigger.value = !togglePlayTrigger.value
 }
 
-// css var helper to get the css var value or as pixel value
-export const getCssVar = (name: string, px = false) => {
-  const val = getComputedStyle(document.documentElement).getPropertyValue(name)
-
-  return px ? val : Number(parseInt(val))
-}
-// ROUTING
-/* centralized function to route to a episode page */
-export const goToEpisodePage = (ep, params, log = true) => {
-  navigateTo({
-    path: `${mediaTypeRoutes[mediaTypes.EPISODE]}${ep.meta?.slug ?? ep.slug}`,
-    query: params,
-  })
-}
-
-/* centralized function to route to a story page */
-export const goToStoryPage = (story, params, log = true) => {
-  navigateTo({
-    path: `${mediaTypeRoutes[mediaTypes.STORY]}${story.media_id ?? story.id}`,
-    query: params,
-  })
-}
-
-/* centralized function to route to a story page */
-export const goToNprPage = (story, log = true) => {
-  navigateTo({
-    path: `${mediaTypeRoutes[mediaTypes.NPR_EPISODE]}${story.media_id ?? story.id}`,
-  })
-}
-/* centralized function to route to a show page */
-export const goToShowPage = (show, params = null) => {
-  navigateTo({
-    path: `${mediaTypeRoutes[mediaTypes.SHOW]}${show.meta?.slug ?? show.slug}`,
-    query: params,
-  })
-}
-
-// return bool if the url has a query param
-export const hasQueryParams = (url) => {
-  const parsedUrl = new URL(url)
-  return parsedUrl.searchParams.toString().length > 0
-}
-
 // checks if the audio key has a valid value for having audio
 export const hasAudio = (audio) => {
   return (
@@ -854,49 +683,18 @@ export const hasAudio = (audio) => {
   )
 }
 
-// Function to get the raw body from a wagtail body array
-export const getWagtailRawBody = (bodyArr) => {
-  let rawbody = ""
-  rawbody += bodyArr.map((item) => {
-    if (item.type === "paragraph") {
-      return item.value
-    } else {
-      return ""
-    }
-  })
-  return rawbody
-}
-
-// Define the interface for the function parameters
-interface AddToFavoritesParams {
-  item: any; // Replace 'any' with the actual type of bucketItem
-  isFavorited: boolean;
-  message?: string;
-  callback?: () => void;
-}
 // function to add to the favorites
-export const addToFavorites2 = async ({ item, isFavorited, message = isFavorited ? "Removed from Favorites." : "Added to Favorites.", callback }: AddToFavoritesParams) => {
-  const user = useCurrentUser();
-  const accountPromptSideBar = useAccountPromptSideBar();
+export const addToFavorites = async (item, isFavorited, message = isFavorited ? "Removed from Favorites" : "Added to Favorites") => {
+  const user = useCurrentUser()
+  const accountPromptSideBar = useAccountPromptSideBar()
   if (user.value) {
-    const globalToast = useGlobalToast();
-
-    const episode = {
-      ...item,
-      slug: item.meta?.slug ?? item.slug,
-    };
+    const globalToast = useGlobalToast()
     if (isFavorited) {
-      await deleteFavorite(episode);
-      getFavoritedItems();
-      if (callback) {
-        callback();
-      }
+      await deleteFavorite(item.id)
+      getFavoritedItems()
     } else {
-      await saveFavorite(episode, episode.type);
-      getFavoritedItems();
-      if (callback) {
-        callback();
-      }
+      await saveFavorite(item.id)
+      getFavoritedItems()
     }
     globalToast.value = {
       severity: "info",
@@ -904,44 +702,7 @@ export const addToFavorites2 = async ({ item, isFavorited, message = isFavorited
       life: 3000,
     }
   } else {
-    accountPromptSideBar.value = true;
-  }
-};
-
-// handles how to use the correct navigate method based on the item type
-export const dynamicNavigation = (item, isSaveHistory = true, isDownloaded = false) => {
-  const isNetworkConnected = useIsNetworkConnected()
-  if (isNetworkConnected.value) {
-    switch (item.type) {
-      case mediaTypes.EPISODE:
-      case mediaTypes.SEGMENT:
-        goToEpisodePage(item, null, isSaveHistory)
-        break
-      case mediaTypes.STORY:
-      case mediaTypes.ARTICLE:
-      case mediaTypes.ARTICLE_PAGE:
-        item.audio
-          ? goToEpisodePage(item, null, isSaveHistory)
-          : goToStoryPage(item, { src: item.cmsSource, downloaded: isDownloaded, id: item.id, }, isSaveHistory)
-        break
-      case mediaTypes.SHOW:
-        goToShowPage(item)
-        break
-      case mediaTypes.NPR_EPISODE:
-      case mediaTypes.NPR_ARTICLE:
-        goToNprPage(item)
-        break
-      default:
-        goToEpisodePage(item, null, isSaveHistory)
-    }
-  } else {
-    const globalToast = useGlobalToast()
-    globalToast.value = {
-      severity: "error",
-      summary: "Not connected. Try again later.",
-      life: 3000,
-      closable: true,
-    }
+    accountPromptSideBar.value = true
   }
 }
 

@@ -1,5 +1,7 @@
 <script setup>
+import { useCurrentUserFavorites } from '~/composables/states'
 import { getFavoritedItems } from '~/utilities/helpers'
+
 definePageMeta({
   layout: 'default',
   layoutTransition: {
@@ -13,7 +15,8 @@ useHead({
   }
 })
 
-const favorites = ref(null)
+const favorites = useCurrentUserFavorites()
+
 onMounted(async () => {
   await getFavoritedItems()
 })
@@ -31,8 +34,15 @@ onMounted(async () => {
 
     <section>
       <h1 class="mb-4">Saved</h1>
-      <p class="mb-4">Coming soon!</p>
-      <p>{{ favorites }}</p>
+      <div class="grid">
+        <div
+          class="col col-6 md:col-4 xl:col-3 mb-3"
+          v-for="item in favorites"
+          :key="item.id"
+        >
+          <Item :data="item" />
+        </div>
+      </div>
     </section>
   </div>
 </template>

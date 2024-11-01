@@ -1,5 +1,5 @@
 <script setup>
-import { checkIsFavorited, addToFavorites2 } from '~/utilities/helpers'
+import { checkIsFavorited, addToFavorites } from '~/utilities/helpers'
 import {
   useCurrentEpisode,
   useCurrentUser,
@@ -30,7 +30,7 @@ watchEffect(async () => {
 // add item to favorites
 const handleAddToFavorites = () => {
   // helper func for adding to favorites, also handles account prompt if not logged in
-  addToFavorites2({
+  addToFavorites({
     item: currentEpisode.value,
     isFavorited: isFavorited.value
   })

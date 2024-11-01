@@ -16,7 +16,7 @@ defineExpose({
 </script>
 
 <template>
-  <div v-if="item" class="card-large mb-4 p-ripple">
+  <div v-if="item" class="card h-full p-ripple">
     <div class="top" v-if="item?.image">
       <img :src="item.image" :alt="item.title" class="w-full" />
     </div>
@@ -25,7 +25,7 @@ defineExpose({
         <h4 class="mb-2">
           {{ item.title }}
         </h4>
-        <p v-html="item.tease" class="mb-3" />
+        <p v-html="item.tease" class="text-xs mb-3" />
       </div>
       <div class="flex justify-content-between align-items-center">
         <slot name="play" />
@@ -36,7 +36,7 @@ defineExpose({
 </template>
 
 <style lang="scss">
-.card-large {
+.card {
   display: flex;
   flex-direction: column;
   border-radius: 8px;
@@ -44,9 +44,25 @@ defineExpose({
   max-width: 100%;
   background-color: var(--background2);
   position: relative;
+  p {
+    // truncate text to 200 charachters and add an ellipsis if it's more
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+  .top {
+    height: 150px;
+    overflow: hidden;
+    img {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
+  }
   .bottom {
     padding: 1rem;
-    height: 100%;
   }
 }
 </style>

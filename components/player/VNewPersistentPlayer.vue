@@ -983,33 +983,5 @@ $container-breakpoint-md: useBreakpointOrFallback('md', 768px);
       opacity: 0.8;
     }
   }
-
-  // live button
-  .media-live-indicator {
-    width: 40px;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    /* Browser resets. */
-    padding: 0;
-    user-select: none;
-    appearance: none;
-    background: none;
-    outline: none;
-    border: none;
-  }
-
-  .media-live-indicator-text {
-    text-transform: uppercase;
-    background-color: var(--red);
-    border-radius: 2px;
-    color: #f5f5f5;
-    font-family: sans-serif;
-    font-size: 9px;
-    font-weight: 900;
-    letter-spacing: 1.5px;
-    padding: 0px 4px;
-    transition: color 0.3s ease;
-  }
 }
 </style>
