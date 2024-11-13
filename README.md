@@ -46,3 +46,9 @@ Running this project in xcode for the first time may present an error about not 
 sudo xattr -w com.apple.xcode.CreatedByBuildSystem true /Users/username/Library/Developer/Xcode/DerivedData/App-fetbnufjaqwaadatgkquwnaykmin/SourcePackages/checkouts/nanopb/build
 ```
 In xcode, select the AppLocal target to run the app on your development device. The device needs to be added to the development team in the Apple Developer Console.
+
+Update capacitor-remote-streamer:
+
+```bash
+npm install https://github.com/kimlarocca/capacitor-remote-streamer/tarball/main --save
+```

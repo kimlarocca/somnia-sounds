@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { RemoteStreamer } from "@nypublicradio/capacitor-remote-streamer"
+import { RemoteStreamer } from "@kimlarocca/capacitor-remote-streamer"
 import { localUserProfileKey } from "~/composables/globals"
 import {
     useIsEpisodePlaying,

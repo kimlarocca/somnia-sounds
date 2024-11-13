@@ -252,13 +252,13 @@ jobs:
           path: android/app/build/outputs/apk
 
 commands:
-  setup_npmrc:
-    steps:
-      - run:
-          name: Setup .npmrc
-          command: |
-            echo "@nypublicradio:registry=https://npm.pkg.github.com" > .npmrc
-            echo "//npm.pkg.github.com/:_authToken=$PAT" >> .npmrc
+  # setup_npmrc:
+  #   steps:
+  #     - run:
+  #         name: Setup .npmrc
+  #         command: |
+  #           echo "@nypublicradio:registry=https://npm.pkg.github.com" > .npmrc
+  #           echo "//npm.pkg.github.com/:_authToken=$PAT" >> .npmrc
 
   setup_mobile_env:
     steps:

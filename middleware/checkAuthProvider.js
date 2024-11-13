@@ -15,7 +15,7 @@ export default defineNuxtRouteMiddleware( async () => {
   const client = useSupabaseClient()
   const config = useRuntimeConfig()
   const currentUser = useCurrentUser()
-  const redirectSlug = '/home'
+  const redirectSlug = '/'
   const user = await client.auth.getSession()
 
   // update the user's profile (name and image) if they signed up with google

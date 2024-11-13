@@ -18,7 +18,7 @@ watch(
     if (user.value) {
       await nextTick()
       await getAndSetUserProfile()
-      navigateTo('/home')
+      navigateTo('/')
     }
   },
   { immediate: true }

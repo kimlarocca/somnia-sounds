@@ -1,5 +1,5 @@
 <script setup>
-import { RemoteStreamer } from '@nypublicradio/capacitor-remote-streamer'
+import { RemoteStreamer } from '@kimlarocca/capacitor-remote-streamer'
 import { Capacitor } from '@capacitor/core'
 import { ref, watch } from 'vue'
 import PlayIcon from '~/components/icons/PlayIcon.vue'
@@ -76,6 +76,7 @@ const switchEpisode = async val => {
   currentEpisode.value = val
   isStreamLoading.value = true
   await nextTick()
+  await RemoteStreamer.setLoop({ loop: true })
   await RemoteStreamer.play({
     url: currentEpisode.value.audio,
     enableCommandCenter: true,
@@ -238,7 +239,7 @@ onMounted(async () => {
     currentEpisodeProgress.value = 0
     // this is work webview detecting the end of the audio
     if (e?.ended) {
-      // episodeEnded() // kim commented this out so we can loop the audio
+      episodeEnded() // kim commented this out so we can loop the audio
     }
   })
   await RemoteStreamer.addListener('ended', e => {
@@ -246,7 +247,7 @@ onMounted(async () => {
     isStreamLoading.value = false
     currentEpisodeProgress.value = 0
     if (e.ended) {
-      // episodeEnded() // kim commented this out so we can loop the audio
+      episodeEnded()
     }
   })
 })

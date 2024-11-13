@@ -2,13 +2,13 @@
 defineProps({
   error: {
     type: Object,
-    default: null,
-  },
+    default: null
+  }
 })
 //clear error and route home
 function handleGoHome() {
   //nuxt global
-  clearError({ redirect: "/home" })
+  clearError({ redirect: '/' })
 }
 
 //clear error and try again
@@ -32,7 +32,11 @@ function handleTryAgain() {
           aria-label="try again"
           @click="handleTryAgain"
         />
-        <Button label="Navigate home" aria-label="Navigate home" @click="handleGoHome" />
+        <Button
+          label="Navigate home"
+          aria-label="Navigate home"
+          @click="handleGoHome"
+        />
       </div>
     </div>
   </div>

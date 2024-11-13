@@ -6,7 +6,7 @@ import StarIcon from './icons/StarIcon.vue'
 
 const route = useRoute()
 const options = ref([
-  { icon: markRaw(HomeIcon), value: 'Home', slug: '/home' },
+  { icon: markRaw(HomeIcon), value: 'Home', slug: '/' },
   { icon: markRaw(MoonIcon), value: 'Sleep', slug: '/sleep' },
   { icon: markRaw(SoundsIcon), value: 'Explore', slug: '/sounds' },
   { icon: markRaw(StarIcon), value: 'Saved', slug: '/saved' }

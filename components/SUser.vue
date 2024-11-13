@@ -106,7 +106,7 @@ const handleModal = () => {
     </Dialog>
     <div v-if="currentUser" class="info flex flex-column gap-2 mt-2">
       <h2 class="mb-2">Hi, {{ currentUserProfile?.name }}</h2>
-      <nuxt-link to="/home" class="p1" @click="onLogOut"> Log out </nuxt-link>
+      <nuxt-link to="/" class="p1" @click="onLogOut"> Log out </nuxt-link>
     </div>
     <div v-else class="info flex flex-column gap-3 mb-4">
       <h2 class="mb-2">You are logged out.</h2>

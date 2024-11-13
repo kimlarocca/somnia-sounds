@@ -2,15 +2,15 @@
 const props = defineProps({
   msg: {
     type: String,
-    default: "An error occured while loading this page.",
+    default: 'Error while loading this page.'
   },
   refreshRoute: {
     type: String,
-    default: "/home",
-  },
+    default: '/'
+  }
 })
 
-const emit = defineEmits(["on-click"])
+const emit = defineEmits(['on-click'])
 
 // hard refresh to the home page
 const handleReloadHome = () => {
@@ -19,7 +19,7 @@ const handleReloadHome = () => {
 //handle try again button
 // refreshes all useFetch calls related to the page
 const handleTryAgain = async () => {
-  emit("on-click")
+  emit('on-click')
 
   try {
     await refreshNuxtData()

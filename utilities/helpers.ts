@@ -239,8 +239,6 @@ export const imageSolver = (url, options = {}) => {
     imgUrl = resizeWagtailImageUrl(url, w, h, q, format)
   } else if (url.includes("media.wnyc.org")) {
     imgUrl = resizePublisherImageUrl(url, w, h, q)
-  } else if (NPRIMAGEDOMAINSOURCES.some(domain => url.includes(domain))) {
-    imgUrl = resizeNprImageUrl(url, w, q, format)
   } else {
     imgUrl = url
   }
