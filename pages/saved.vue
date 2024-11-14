@@ -34,7 +34,7 @@ onMounted(async () => {
     </Html>
 
     <section v-if="currentUser">
-      <h1 class="mb-4">Saved</h1>
+      <h1 class="mb-4">saved</h1>
       <div v-if="favorites?.length > 0" class="grid">
         <div
           class="col col-6 md:col-4 xl:col-3 mb-3"

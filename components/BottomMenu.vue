@@ -1,14 +1,14 @@
 <script setup>
-import HomeIcon from './icons/HomeIcon.vue'
 import MoonIcon from './icons/MoonIcon.vue'
 import SoundsIcon from './icons/SoundsIcon.vue'
 import StarIcon from './icons/StarIcon.vue'
+import ExploreIcon from './icons/ExploreIcon.vue'
 
 const route = useRoute()
 const options = ref([
-  { icon: markRaw(HomeIcon), value: 'Home', slug: '/' },
-  { icon: markRaw(MoonIcon), value: 'Sleep', slug: '/sleep' },
-  { icon: markRaw(SoundsIcon), value: 'Explore', slug: '/sounds' },
+  { icon: markRaw(MoonIcon), value: 'Home', slug: '/' },
+  { icon: markRaw(SoundsIcon), value: 'Sounds', slug: '/sounds' },
+  { icon: markRaw(ExploreIcon), value: 'Discover', slug: '/discover' },
   { icon: markRaw(StarIcon), value: 'Saved', slug: '/saved' }
 ])
 </script>

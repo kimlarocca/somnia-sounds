@@ -51,7 +51,7 @@ const clearSearchField = () => {
     </Html>
 
     <section>
-      <h1 class="mb-5">explore</h1>
+      <h1 class="mb-5">sounds</h1>
       <div class="flex align-items-center gap-2 mb-5">
         <Button
           class="topic-btn text-sm white-space-nowrap active"
@@ -78,7 +78,7 @@ const clearSearchField = () => {
           @click="showSearchBar = !showSearchBar"
         />
       </div>
-      <Transition name="fade">
+      <Transition name="slide-fade">
         <div v-if="showSearchBar" class="flex align-items-center gap-2 mb-4">
           <span class="p-input-icon-left w-full">
             <i class="pi pi-search text-color" />
@@ -100,7 +100,6 @@ const clearSearchField = () => {
           />
         </div>
       </Transition>
-      <h3 class="mb-4">Sounds</h3>
       <div class="grid">
         <div
           class="col col-6 md:col-4 xl:col-3 mb-3"

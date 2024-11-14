@@ -7,9 +7,9 @@ const accountPromptSideBar = useAccountPromptSideBar()
 </script>
 
 <template>
-  <div class="account-prompt-sidebar py-4">
+  <div class="account-prompt-sidebar pb-2">
     <section>
-      <h1 class="mb-4">Save Your Favorites</h1>
+      <h1 class="mb-4">save your favorites</h1>
       <p class="text-base mb-4">
         <nuxt-link
           to="#"
