@@ -8,7 +8,9 @@ const settingsSideBar = useSettingSideBar()
   <div class="the-header">
     <section class="py-0">
       <div class="flex justify-content-between align-items-center">
-        <Logo class="mr-3" />
+        <nuxt-link to="/">
+          <Logo class="mr-3" />
+        </nuxt-link>
         <Button
           @click="settingsSideBar = true"
           icon="pi pi-bars"
