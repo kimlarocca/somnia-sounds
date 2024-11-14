@@ -5,6 +5,7 @@ defineProps({
     default: null
   }
 })
+
 //clear error and route home
 function handleGoHome() {
   //nuxt global
@@ -19,25 +20,21 @@ function handleTryAgain() {
 </script>
 
 <template>
-  <div class="">
-    <div class="flex flex-column gap-3 py-4 px-5">
-      <h1>{{ error?.message }}</h1>
-      There was an error 😱
-
-      <br />
-      <div class="mt-3 flex gap-3 justify-content-center">
-        <Button
-          label="Try again"
-          severity="secondary"
-          aria-label="try again"
-          @click="handleTryAgain"
-        />
-        <Button
-          label="Navigate home"
-          aria-label="Navigate home"
-          @click="handleGoHome"
-        />
-      </div>
+  <section>
+    <h1 class="mb-4">page not found!</h1>
+    <p class="mb-4">Sorry, there was an error 😱</p>
+    <div class="flex gap-3">
+      <Button
+        label="Try Again"
+        severity="secondary"
+        aria-label="try Again"
+        @click="handleTryAgain"
+      />
+      <Button
+        label="Navigate Home"
+        aria-label="Navigate Home"
+        @click="handleGoHome"
+      />
     </div>
-  </div>
+  </section>
 </template>

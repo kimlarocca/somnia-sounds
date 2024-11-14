@@ -234,7 +234,7 @@ watch(globalError, error => {
       <Title> Somnia Sounds </Title>
       <Meta
         name="description"
-        content="Somina Sounds helps you relax and sleep better with soothing sounds and meditations."
+        content="Somnia Sounds helps you relax and sleep better with soothing sounds and meditations."
       />
       <Meta name="keywords" content="somnia sounds" />
       <Meta name="og:site_name" content="Somnia Sounds" />
@@ -246,12 +246,11 @@ watch(globalError, error => {
       <Meta name="og:title" content="Somnia Sounds" />
       <Meta
         name="og:description"
-        content="Somina Sounds helps you relax and sleep better with soothing sounds and meditations."
+        content="Somnia Sounds helps you relax and sleep better with soothing sounds and meditations."
       />
-      <!-- kim TO DO -->
       <Meta
         name="og:image"
-        content="https://media.wnyc.org/i/1200/1200/c/80/1/wnyc_square_logo.png"
+        content="https://uhqlxyalbxtrtvduigiv.supabase.co/storage/v1/object/public/images/splash.png?t=2024-11-14T20%3A51%3A41.939Z"
       />
       <Meta name="og:image:alt" content="Somnia Sounds" />
       <Meta name="og:image:width" content="1200" />
@@ -262,12 +261,11 @@ watch(globalError, error => {
       <Meta name="twitter:title" content="Somnia Sounds" />
       <Meta
         name="twitter:description"
-        content="Somina Sounds helps you relax and sleep better with soothing sounds and meditations"
+        content="Somnia Sounds helps you relax and sleep better with soothing sounds and meditations"
       />
-      <!-- KIM TO DO -->
       <Meta
         name="twitter:image"
-        content="https://media.wnyc.org/i/1200/1200/c/80/1/wnyc_square_logo.png"
+        content="https://uhqlxyalbxtrtvduigiv.supabase.co/storage/v1/object/public/images/splash.png?t=2024-11-14T20%3A51%3A41.939Z"
       />
       <Meta name="theme-color" :content="browserTopColor" />
       <Meta name="msapplication-TileColor" :content="browserTopColor" />

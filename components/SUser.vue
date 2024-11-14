@@ -127,9 +127,6 @@ const handleModal = () => {
 
 <style lang="scss" scoped>
 .s-user {
-  .user-icon path {
-    color: var(--night--500);
-  }
   .pi-user {
     color: var(--background2);
   }

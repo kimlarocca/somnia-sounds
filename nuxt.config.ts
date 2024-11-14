@@ -1,4 +1,4 @@
-// import { sentryVitePlugin } from '@sentry/vite-plugin'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 export default defineNuxtConfig({
   modules: [
     '@nuxtjs/supabase',
@@ -56,7 +56,7 @@ export default defineNuxtConfig({
         {
           rel: 'icon',
           type: 'image/x-icon',
-          href: 'https://media.wnyc.org/static/img/favicon_wnyc.ico?_=1553611630' // KIM TO DO
+          href: 'https://uhqlxyalbxtrtvduigiv.supabase.co/storage/v1/object/public/images/favicon.ico?t=2024-11-14T20%3A49%3A42.478Z'
         }
       ]
     }
@@ -92,17 +92,17 @@ export default defineNuxtConfig({
         ]
       }
     },
-    // plugins: [
-    //   process.env.SENTRY_ENV === 'development'
-    //     ? null
-    //     : sentryVitePlugin({
-    //       include: '.nuxt/dist',
-    //       ignore: ['node_modules', 'nuxt.config.ts'],
-    //       org: 'nypublicradio',
-    //       project: 'wnyc-vue3',
-    //       authToken: process.env.SENTRY_AUTH_TOKEN,
-    //     }),
-    // ],
+    plugins: [
+      process.env.SENTRY_ENV === 'prod'
+        ? null
+        : sentryVitePlugin({
+          include: '.nuxt/dist',
+          ignore: ['node_modules', 'nuxt.config.ts'],
+          org: 'kim-larocca',
+          project: 'somnia-sounds',
+          authToken: process.env.SENTRY_AUTH_TOKEN,
+        }),
+    ],
   },
 
   sourcemap: {

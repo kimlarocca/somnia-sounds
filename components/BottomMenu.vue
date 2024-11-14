@@ -22,7 +22,10 @@ const options = ref([
             <div class="item">
               <component
                 :is="item.icon"
-                :active="route.name === item.value.toLowerCase()"
+                :active="
+                  route.name === item.value.toLowerCase() ||
+                  (route.name === 'index' && item.value === 'Home')
+                "
               >
               </component>
               {{ item.value }}
