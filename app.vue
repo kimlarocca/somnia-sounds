@@ -272,7 +272,7 @@ watch(globalError, error => {
     </Head>
   </Html>
   <NuxtLayout>
-    <NuxtPage />
+    <NuxtPage :keepalive="{}" />
   </NuxtLayout>
   <NetworkBanner :connected="isNetworkConnected" />
   <AudioPlayer />

@@ -30,7 +30,7 @@ const fileSystemLS = useFileSystemLS()
       <!-- <p>!!Storage limit: {{ used }} of {{ granted }}</p> -->
       <div>
         <div class="flex flex-column-reverse gap-4 mt-2">
-          <EpisodeItem
+          <Item
             v-for="file in fileSystemLS"
             :data="file"
             :key="`EI-${file.id}`"
@@ -46,7 +46,7 @@ const fileSystemLS = useFileSystemLS()
                 @click="handleDelete(file)"
               />
             </div> -->
-          </EpisodeItem>
+          </Item>
         </div>
       </div>
     </div>

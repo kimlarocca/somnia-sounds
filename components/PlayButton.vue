@@ -3,7 +3,6 @@ import PlayIcon from '~/components/icons/PlayIcon.vue'
 import PauseIcon from '~/components/icons/PauseIcon.vue'
 import {
   useCurrentEpisode,
-  useIsStreamLoading,
   useIsEpisodePlaying,
   useCurrentEpisodeDuration,
   useCurrentEpisodeProgress
@@ -11,7 +10,6 @@ import {
 
 const isEpisodePlaying = useIsEpisodePlaying()
 const currentEpisode = useCurrentEpisode()
-const isStreamLoading = useIsStreamLoading()
 const currentEpisodeDuration = useCurrentEpisodeDuration()
 const currentEpisodeProgress = useCurrentEpisodeProgress()
 
@@ -50,6 +48,13 @@ const togglePlay = () => {
   emit('on-click')
 }
 
+const audio = new Audio(props.data.audio)
+
+const isDownloading = computed(() => {
+  // check the audio ready state
+  return audio.readyState === 0
+})
+
 const getProgress = computed(() => {
   return Math.ceil(
     (currentEpisodeProgress.value / currentEpisodeDuration.value) * 100
@@ -80,7 +85,6 @@ watch(
     <Button
       severity="secondary"
       @click.prevent="togglePlay"
-      :aria-disabled="isStreamLoading"
       aria-label="play"
       tabindex="0"
       :class="[{ active: isPlaying }]"
@@ -89,17 +93,17 @@ watch(
       <slot name="icon">
         <Transition name="fade" mode="out-in">
           <div
-            v-if="isPlaying && !isStreamLoading"
+            v-if="isPlaying && !isDownloading"
             class="flex align-items-center icon relative"
             :class="[{ live: props.live, paused: !isEpisodePlaying }]"
           >
             <CircularProgressBar :progress="getProgress" />
-            <PlayIcon v-if="!isEpisodePlaying && !isStreamLoading" />
-            <PauseIcon v-if="isEpisodePlaying && !isStreamLoading" />
-            <i v-if="isStreamLoading" class="pi pi-spin pi-spinner"></i>
+            <PlayIcon v-if="!isEpisodePlaying && !isDownloading" />
+            <PauseIcon v-if="isEpisodePlaying && !isDownloading" />
+            <i v-if="isDownloading" class="pi pi-spin pi-spinner"></i>
           </div>
           <div
-            v-else-if="isPlaying && isStreamLoading"
+            v-else-if="isPlaying && isDownloading"
             class="flex align-items-center icon relative"
           >
             <i class="pi pi-spin pi-spinner"></i>

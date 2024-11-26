@@ -44,6 +44,7 @@ const togglePlayHere = item => {
         v-if="cardItem.audio"
         :data="cardItem"
         @onClick="togglePlayHere(cardItem)"
+        :is-downloaded="isDownloaded"
         class="z-2"
       />
     </template>

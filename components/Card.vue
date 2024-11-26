@@ -18,7 +18,7 @@ defineExpose({
 <template>
   <div v-if="item" class="card h-full p-ripple">
     <div class="top" v-if="item?.image">
-      <img :src="item.image" :alt="item.title" class="w-full" />
+      <img loading="lazy" :src="item.image" :alt="item.title" class="w-full" />
     </div>
     <div class="bottom flex flex-column gap-2 justify-content-between">
       <div class="flex flex-column gap-2">
@@ -45,12 +45,13 @@ defineExpose({
   background-color: var(--background2);
   position: relative;
   p {
-    // truncate text to 200 charachters and add an ellipsis if it's more
+    // truncate text to 200 characters and add an ellipsis if it's more
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
+    min-height: 80px;
   }
   .top {
     height: 150px;

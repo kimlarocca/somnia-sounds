@@ -13,15 +13,20 @@ useHead({
 })
 
 const client = useSupabaseClient()
-const sounds = ref(null)
+const pending = ref(true)
+const sounds = ref([])
 const searchFieldValue = ref('')
 const showSearchBar = ref(false)
 
-const { data, error } = await client.from('sounds').select('*').order('title')
-if (error) {
-  console.error('sounds database error', error)
+const fetchData = async () => {
+  const { data, error } = await client.from('sounds').select('*').order('title')
+  if (error) {
+    console.error('sounds database error', error)
+  } else {
+    sounds.value = data
+    pending.value = false
+  }
 }
-sounds.value = data
 
 // computed property for filtered sounds based on search field value
 const filteredItems = computed(() => {
@@ -38,19 +43,35 @@ const filteredItems = computed(() => {
 const clearSearchField = () => {
   searchFieldValue.value = ''
 }
+
+onMounted(() => {
+  fetchData()
+})
 </script>
 
 <template>
   <div>
     <Html lang="en">
       <Head>
-        <Title>Somnia Sounds | Explore</Title>
+        <Title>Somnia Sounds | Sounds</Title>
         <Meta name="og:title" content="Somnia Sounds | Sounds" />
         <Meta name="twitter:title" content="Somnia Sounds | Sounds" />
       </Head>
     </Html>
 
-    <section>
+    <section v-if="pending">
+      <div class="grid">
+        <div
+          v-for="i in 12"
+          :key="`skeleton-${i}`"
+          class="col col-6 md:col-4 xl:col-3 mb-3"
+        >
+          <SkeletonItem />
+        </div>
+      </div>
+    </section>
+
+    <section v-else>
       <h1 class="mb-5">sounds</h1>
       <div class="flex align-items-center gap-2 mb-5">
         <Button

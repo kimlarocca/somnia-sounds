@@ -3,8 +3,8 @@ const route = useRoute()
 
 useHead({
   bodyAttrs: {
-    class: 'template-blank',
-  },
+    class: 'template-blank'
+  }
 })
 </script>
 <template>
